@@ -3,3 +3,5 @@
 Youtube video link: https://www.youtube.com/watch?v=LOiYgVSLlrE&feature=youtu.be
 
 LinkedIn post link : https://www.linkedin.com/pulse/cloud-based-iot-system-collects-information-from-set-virtual-ferrara/?published=t
+
+In order to start the client the library mqtt need to be installed : npm install mqtt --save
