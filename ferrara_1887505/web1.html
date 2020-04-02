@@ -301,6 +301,42 @@
 			}
 		  }
 	}
+	    
+	    	function sortTableRiot() {
+		console.log("sorting");
+		  var table, rows, switching, i, x, y, shouldSwitch;
+		  table = document.getElementById("TabRiot");
+		  switching = true;
+		  /*Make a loop that will continue until
+		  no switching has been done:*/
+		  while (switching) {
+			//start by saying: no switching is done:
+			switching = false;
+			rows = table.rows;
+			/*Loop through all table rows (except the
+			first, which contains table headers):*/
+			for (i = 1; i < (rows.length - 1); i++) {
+			  //start by saying there should be no switching:
+			  shouldSwitch = false;
+			  /*Get the two elements you want to compare,
+			  one from current row and one from the next:*/
+			  x = rows[i].getElementsByTagName("TD")[0];
+			  y = rows[i + 1].getElementsByTagName("TD")[0];
+			  //check if the two rows should switch place:
+			  if (Number(x.innerHTML) < Number(y.innerHTML)) {
+				//if so, mark as a switch and break the loop:
+				shouldSwitch = true;
+				break;
+			  }
+			}
+			if (shouldSwitch) {
+			  /*If a switch has been marked, make the switch
+			  and mark that a switch has been done:*/
+			  rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+			  switching = true;
+			}
+		  }
+	}
 
         function LastHourTemp() {			//Displays the last hour values for temperature from both devices
 
@@ -884,11 +920,85 @@
 
 
 		}
+	    
+	    		function LastHourRiot() {			//Displays the last hour values for Rain Height from both devices
+
+			var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+			var currentTime = new Date().getTime();
+			var olderTime = currentTime - 3600000;
+
+
+			var xhttp = new XMLHttpRequest();			//First Get Request to get rain telemetries from first device; it needs device ID, keys, and the time interval (from currentTime - 3600000 to currentTime )
+			xhttp.open('GET', 'http://demo.thingsboard.io/api/plugins/telemetry/DEVICE/032eec10-6ad0-11ea-ad02-b3576b7d39f1/values/timeseries?keys=temperature,humidity,windDirection,windIntensity,rainHeight,device&startTs='+ olderTime + '&endTs=' + currentTime + '&limit=60&agg=AVG');
+			xhttp.setRequestHeader('Content-Type', 'application/json');
+			xhttp.setRequestHeader('X-Authorization', 'Bearer XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+			xhttp.send();
+			xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var response = JSON.parse(this.responseText);
+
+
+				//storing parsed results in corresponding vectors, so we can access the data.
+				var temp = response.temperature;
+				var hum = response.humidity;
+				var dir = response.windDirection;
+				var int = response.windIntensity;
+				var rain = response.rainHeight;
+				var dev = response.device;
+
+				for (var i = 0; i < rain.length; i++) {			//For cycle to build TabRiot table.	
+
+						var table = document.getElementById("TabRiot");
+
+						var row = table.insertRow();
+
+						var cell0 = row.insertCell(0);
+						var cell1 = row.insertCell(1);
+						var cell2 = row.insertCell(2);
+						var cell3 = row.insertCell(3);
+						var cell4 = row.insertCell(4);
+						var cell5 = row.insertCell(5);
+						var cell6 = row.insertCell(6);
+
+							var date = new Date(rain[i].ts);
+							var year = date.getFullYear();
+							var month = months[date.getMonth()];
+							var day = date.getDate();
+							// Hours part from the timestamp
+							var hours = date.getHours();
+							// Minutes part from the timestamp
+							var minutes = date.getMinutes();
+							// Seconds part from the timestamp
+							var seconds = date.getSeconds();
+							var milliseconds = date.getMilliseconds();
+
+							// Will display timestamp in a human-friendly format
+							var formattedTime = day + " " + month + " " + year + " " + hours + ' : ' + minutes + 'm : ' + seconds + "s : " + milliseconds + "ms";
+					
+							cell0.innerHTML = Number(rain[i].ts);
+							cell1.innerHTML = temp[i].value + "°";
+							cell2.innerHTML = hum[i].value + "%";
+							cell3.innerHTML = dir[i].value + "°";
+							cell4.innerHTML = int[i].value + "m/s";
+							cell5.innerHTML = rain[i].value + "mm/h";
+							cell6.innerHTML = dev[i].value;
+
+				}
+
+				console.log(response);
+		
+			}
+
+		};
+
+
+
+}
 
     </script>
 
 </head>
-<body onload="LastHourTemp(); LastHourHum(); LastHourDir(); LastHourInt(); LastHourRain()" style="margin: 0px;">	<!-- On page load, execute funcions -->
+<body onload="LastHourTemp(); LastHourHum(); LastHourDir(); LastHourInt(); LastHourRain(); LastHourRiot()" style="margin: 0px;">	<!-- On page load, execute funcions -->
 
 
 <div id="header" style="width: 100%; height: 300px;">
@@ -990,6 +1100,23 @@
 			<tr>
 				<th>ts</th>
 				<th style="width: 25%">Timestamp</th>
+				<th>Rain Height</th>
+				<th>Device</th>
+			</tr>
+		</table>
+
+	</div>
+	
+	<div style="position: relative; margin: 10px;">
+		<h3 style="text-align: center; position: relative;">Table of values for the last hour for Riot-OS Devices   <button onclick="sortTableRiot()">Sort per ts</button></h3>				<!--TabRain and sortTableRiot button-->
+
+		<table style="width: 127%" id="TabRiot">
+			<tr>
+				<th>ts</th>
+				<th>Temperature</th>
+				<th>Humidity</th>
+				<th>Wind Direction</th>
+				<th>wind Intensity</th>
 				<th>Rain Height</th>
 				<th>Device</th>
 			</tr>
