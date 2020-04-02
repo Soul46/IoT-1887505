@@ -13,7 +13,7 @@
 
 
         function RealtimeDevice1() {
-            var token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbmRyZXc5NmZlcnJhcmFAaG90bWFpbC5pdCIsInNjb3BlcyI6WyJURU5BTlRfQURNSU4iXSwidXNlcklkIjoiZDg0MjI3MTAtNmFjZi0xMWVhLThlMGEtN2QwZWYyYTY4MmQzIiwiZmlyc3ROYW1lIjoiQW5kcmVhIiwibGFzdE5hbWUiOiJGZXJyYXJhIiwiZW5hYmxlZCI6dHJ1ZSwicHJpdmFjeVBvbGljeUFjY2VwdGVkIjp0cnVlLCJpc1B1YmxpYyI6ZmFsc2UsInRlbmFudElkIjoiZDgwNDVhYzAtNmFjZi0xMWVhLThlMGEtN2QwZWYyYTY4MmQzIiwiY3VzdG9tZXJJZCI6IjEzODE0MDAwLTFkZDItMTFiMi04MDgwLTgwODA4MDgwODA4MCIsImlzcyI6InRoaW5nc2JvYXJkLmlvIiwiaWF0IjoxNTg0NzM0NjUwLCJleHAiOjE1ODY1MzQ2NTB9.6kt8qRAVodFIWqcSZYOzAExVgHJpPcWH0gLghfLm3Sbt3jLLW7rnkOMsL9RRmmDo8-XD38k0qqW67mjwB2Z1HQ";
+            var token = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
             var entityId = "0324b2e0-6ad0-11ea-ad02-b3576b7d39f1";
             var webSocket = new WebSocket("wss://demo.thingsboard.io/api/ws/plugins/telemetry?token=" + token);
 
@@ -67,7 +67,7 @@
         }
 
 		function RealtimeDevice2() {
-            var token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbmRyZXc5NmZlcnJhcmFAaG90bWFpbC5pdCIsInNjb3BlcyI6WyJURU5BTlRfQURNSU4iXSwidXNlcklkIjoiZDg0MjI3MTAtNmFjZi0xMWVhLThlMGEtN2QwZWYyYTY4MmQzIiwiZmlyc3ROYW1lIjoiQW5kcmVhIiwibGFzdE5hbWUiOiJGZXJyYXJhIiwiZW5hYmxlZCI6dHJ1ZSwicHJpdmFjeVBvbGljeUFjY2VwdGVkIjp0cnVlLCJpc1B1YmxpYyI6ZmFsc2UsInRlbmFudElkIjoiZDgwNDVhYzAtNmFjZi0xMWVhLThlMGEtN2QwZWYyYTY4MmQzIiwiY3VzdG9tZXJJZCI6IjEzODE0MDAwLTFkZDItMTFiMi04MDgwLTgwODA4MDgwODA4MCIsImlzcyI6InRoaW5nc2JvYXJkLmlvIiwiaWF0IjoxNTg0NzM0NjUwLCJleHAiOjE1ODY1MzQ2NTB9.6kt8qRAVodFIWqcSZYOzAExVgHJpPcWH0gLghfLm3Sbt3jLLW7rnkOMsL9RRmmDo8-XD38k0qqW67mjwB2Z1HQ";
+            var token = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
             var entityId = "032c2cf0-6ad0-11ea-ad02-b3576b7d39f1";
             var webSocket = new WebSocket("wss://demo.thingsboard.io/api/ws/plugins/telemetry?token=" + token);
 
@@ -312,7 +312,7 @@
             var xhttp = new XMLHttpRequest();			//First Get Request to get temperature telemetries from first device; it needs device ID, keys, and the time interval (from currentTime - 3600000 to currentTime )
 			xhttp.open('GET', 'http://demo.thingsboard.io/api/plugins/telemetry/DEVICE/0324b2e0-6ad0-11ea-ad02-b3576b7d39f1/values/timeseries?keys=temperature,device&startTs='+ olderTime + '&endTs=' + currentTime + '&limit=60&agg=AVG');
 			xhttp.setRequestHeader('Content-Type', 'application/json');
-			xhttp.setRequestHeader('X-Authorization', 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbmRyZXc5NmZlcnJhcmFAaG90bWFpbC5pdCIsInNjb3BlcyI6WyJURU5BTlRfQURNSU4iXSwidXNlcklkIjoiZDg0MjI3MTAtNmFjZi0xMWVhLThlMGEtN2QwZWYyYTY4MmQzIiwiZmlyc3ROYW1lIjoiQW5kcmVhIiwibGFzdE5hbWUiOiJGZXJyYXJhIiwiZW5hYmxlZCI6dHJ1ZSwicHJpdmFjeVBvbGljeUFjY2VwdGVkIjp0cnVlLCJpc1B1YmxpYyI6ZmFsc2UsInRlbmFudElkIjoiZDgwNDVhYzAtNmFjZi0xMWVhLThlMGEtN2QwZWYyYTY4MmQzIiwiY3VzdG9tZXJJZCI6IjEzODE0MDAwLTFkZDItMTFiMi04MDgwLTgwODA4MDgwODA4MCIsImlzcyI6InRoaW5nc2JvYXJkLmlvIiwiaWF0IjoxNTg0NzM0NjUwLCJleHAiOjE1ODY1MzQ2NTB9.6kt8qRAVodFIWqcSZYOzAExVgHJpPcWH0gLghfLm3Sbt3jLLW7rnkOMsL9RRmmDo8-XD38k0qqW67mjwB2Z1HQ'); //X-Authorization to access thingsboard account
+			xhttp.setRequestHeader('X-Authorization', 'Bearer XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'); //X-Authorization to access thingsboard account
 			xhttp.send();
 			xhttp.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
@@ -350,7 +350,7 @@
 								
 								cell0.innerHTML = Number(temp[i].ts);
 								cell1.innerHTML = formattedTime;
-								cell2.innerHTML = Number(temp[i].value).toFixed(2) + "�";
+								cell2.innerHTML = Number(temp[i].value).toFixed(2) + "째";
 								cell3.innerHTML = dev[i].value;
 
 						}
@@ -365,7 +365,7 @@
 			var xhttp2 = new XMLHttpRequest();			//Second Get Request to get temperature telemetries from second device; it needs device ID, keys, and the time interval (from currentTime - 336000000 to currentTime )
 			xhttp2.open('GET', 'http://demo.thingsboard.io/api/plugins/telemetry/DEVICE/032c2cf0-6ad0-11ea-ad02-b3576b7d39f1/values/timeseries?keys=temperature,device&startTs='+ olderTime + '&endTs=' + currentTime + '&limit=60&agg=AVG');
 			xhttp2.setRequestHeader('Content-Type', 'application/json');
-			xhttp2.setRequestHeader('X-Authorization', 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbmRyZXc5NmZlcnJhcmFAaG90bWFpbC5pdCIsInNjb3BlcyI6WyJURU5BTlRfQURNSU4iXSwidXNlcklkIjoiZDg0MjI3MTAtNmFjZi0xMWVhLThlMGEtN2QwZWYyYTY4MmQzIiwiZmlyc3ROYW1lIjoiQW5kcmVhIiwibGFzdE5hbWUiOiJGZXJyYXJhIiwiZW5hYmxlZCI6dHJ1ZSwicHJpdmFjeVBvbGljeUFjY2VwdGVkIjp0cnVlLCJpc1B1YmxpYyI6ZmFsc2UsInRlbmFudElkIjoiZDgwNDVhYzAtNmFjZi0xMWVhLThlMGEtN2QwZWYyYTY4MmQzIiwiY3VzdG9tZXJJZCI6IjEzODE0MDAwLTFkZDItMTFiMi04MDgwLTgwODA4MDgwODA4MCIsImlzcyI6InRoaW5nc2JvYXJkLmlvIiwiaWF0IjoxNTg0NzM0NjUwLCJleHAiOjE1ODY1MzQ2NTB9.6kt8qRAVodFIWqcSZYOzAExVgHJpPcWH0gLghfLm3Sbt3jLLW7rnkOMsL9RRmmDo8-XD38k0qqW67mjwB2Z1HQ');
+			xhttp2.setRequestHeader('X-Authorization', 'Bearer XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
 			xhttp2.send();
 			xhttp2.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
@@ -403,7 +403,7 @@
 
 								cell0.innerHTML = Number(temp[i].ts);
 								cell1.innerHTML = formattedTime;
-								cell2.innerHTML = Number(temp[i].value).toFixed(2) + "�";
+								cell2.innerHTML = Number(temp[i].value).toFixed(2) + "째";
 								cell3.innerHTML = dev[i].value;
 
 					}
@@ -427,7 +427,7 @@
             var xhttp = new XMLHttpRequest();		//First Get Request to get humidity telemetries from first device; it needs device ID, keys, and the time interval (from currentTime - 3600000 to currentTime )
 			xhttp.open('GET', 'http://demo.thingsboard.io/api/plugins/telemetry/DEVICE/0324b2e0-6ad0-11ea-ad02-b3576b7d39f1/values/timeseries?keys=humidity,device&startTs='+ olderTime + '&endTs=' + currentTime + '&limit=60&agg=AVG');
 			xhttp.setRequestHeader('Content-Type', 'application/json');
-			xhttp.setRequestHeader('X-Authorization', 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbmRyZXc5NmZlcnJhcmFAaG90bWFpbC5pdCIsInNjb3BlcyI6WyJURU5BTlRfQURNSU4iXSwidXNlcklkIjoiZDg0MjI3MTAtNmFjZi0xMWVhLThlMGEtN2QwZWYyYTY4MmQzIiwiZmlyc3ROYW1lIjoiQW5kcmVhIiwibGFzdE5hbWUiOiJGZXJyYXJhIiwiZW5hYmxlZCI6dHJ1ZSwicHJpdmFjeVBvbGljeUFjY2VwdGVkIjp0cnVlLCJpc1B1YmxpYyI6ZmFsc2UsInRlbmFudElkIjoiZDgwNDVhYzAtNmFjZi0xMWVhLThlMGEtN2QwZWYyYTY4MmQzIiwiY3VzdG9tZXJJZCI6IjEzODE0MDAwLTFkZDItMTFiMi04MDgwLTgwODA4MDgwODA4MCIsImlzcyI6InRoaW5nc2JvYXJkLmlvIiwiaWF0IjoxNTg0NzM0NjUwLCJleHAiOjE1ODY1MzQ2NTB9.6kt8qRAVodFIWqcSZYOzAExVgHJpPcWH0gLghfLm3Sbt3jLLW7rnkOMsL9RRmmDo8-XD38k0qqW67mjwB2Z1HQ');
+			xhttp.setRequestHeader('X-Authorization', 'Bearer XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
 			xhttp.send();
 			xhttp.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
@@ -481,7 +481,7 @@
 			var xhttp2 = new XMLHttpRequest();			//Second Get Request to get humidity telemetries from second device; it needs device ID, keys, and the time interval (from currentTime - 3600000 to currentTime )
 			xhttp2.open('GET', 'http://demo.thingsboard.io/api/plugins/telemetry/DEVICE/032c2cf0-6ad0-11ea-ad02-b3576b7d39f1/values/timeseries?keys=humidity,device&startTs='+ olderTime + '&endTs=' + currentTime + '&limit=60&agg=AVG');
 			xhttp2.setRequestHeader('Content-Type', 'application/json');
-			xhttp2.setRequestHeader('X-Authorization', 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbmRyZXc5NmZlcnJhcmFAaG90bWFpbC5pdCIsInNjb3BlcyI6WyJURU5BTlRfQURNSU4iXSwidXNlcklkIjoiZDg0MjI3MTAtNmFjZi0xMWVhLThlMGEtN2QwZWYyYTY4MmQzIiwiZmlyc3ROYW1lIjoiQW5kcmVhIiwibGFzdE5hbWUiOiJGZXJyYXJhIiwiZW5hYmxlZCI6dHJ1ZSwicHJpdmFjeVBvbGljeUFjY2VwdGVkIjp0cnVlLCJpc1B1YmxpYyI6ZmFsc2UsInRlbmFudElkIjoiZDgwNDVhYzAtNmFjZi0xMWVhLThlMGEtN2QwZWYyYTY4MmQzIiwiY3VzdG9tZXJJZCI6IjEzODE0MDAwLTFkZDItMTFiMi04MDgwLTgwODA4MDgwODA4MCIsImlzcyI6InRoaW5nc2JvYXJkLmlvIiwiaWF0IjoxNTg0NzM0NjUwLCJleHAiOjE1ODY1MzQ2NTB9.6kt8qRAVodFIWqcSZYOzAExVgHJpPcWH0gLghfLm3Sbt3jLLW7rnkOMsL9RRmmDo8-XD38k0qqW67mjwB2Z1HQ');
+			xhttp2.setRequestHeader('X-Authorization', 'Bearer XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
 			xhttp2.send();
 			xhttp2.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
@@ -543,7 +543,7 @@
             var xhttp = new XMLHttpRequest();			//First Get Request to get wind Direction telemetries from first device; it needs device ID, keys, and the time interval (from currentTime - 3600000 to currentTime )
 			xhttp.open('GET', 'http://demo.thingsboard.io/api/plugins/telemetry/DEVICE/0324b2e0-6ad0-11ea-ad02-b3576b7d39f1/values/timeseries?keys=windDirection,device&startTs='+ olderTime + '&endTs=' + currentTime + '&limit=60&agg=AVG');
 			xhttp.setRequestHeader('Content-Type', 'application/json');
-			xhttp.setRequestHeader('X-Authorization', 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbmRyZXc5NmZlcnJhcmFAaG90bWFpbC5pdCIsInNjb3BlcyI6WyJURU5BTlRfQURNSU4iXSwidXNlcklkIjoiZDg0MjI3MTAtNmFjZi0xMWVhLThlMGEtN2QwZWYyYTY4MmQzIiwiZmlyc3ROYW1lIjoiQW5kcmVhIiwibGFzdE5hbWUiOiJGZXJyYXJhIiwiZW5hYmxlZCI6dHJ1ZSwicHJpdmFjeVBvbGljeUFjY2VwdGVkIjp0cnVlLCJpc1B1YmxpYyI6ZmFsc2UsInRlbmFudElkIjoiZDgwNDVhYzAtNmFjZi0xMWVhLThlMGEtN2QwZWYyYTY4MmQzIiwiY3VzdG9tZXJJZCI6IjEzODE0MDAwLTFkZDItMTFiMi04MDgwLTgwODA4MDgwODA4MCIsImlzcyI6InRoaW5nc2JvYXJkLmlvIiwiaWF0IjoxNTg0NzM0NjUwLCJleHAiOjE1ODY1MzQ2NTB9.6kt8qRAVodFIWqcSZYOzAExVgHJpPcWH0gLghfLm3Sbt3jLLW7rnkOMsL9RRmmDo8-XD38k0qqW67mjwB2Z1HQ');
+			xhttp.setRequestHeader('X-Authorization', 'Bearer XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
 			xhttp.send();
 			xhttp.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
@@ -582,7 +582,7 @@
 								
 								cell0.innerHTML = Number(dir[i].ts);
 								cell1.innerHTML = formattedTime;
-								cell2.innerHTML = dir[i].value + "�";
+								cell2.innerHTML = dir[i].value + "째";
 								cell3.innerHTML = dev[i].value;
 
 						}
@@ -597,7 +597,7 @@
 			var xhttp2 = new XMLHttpRequest();			//Second Get Request to get wind Direction telemetries from second device; it needs device ID, keys, and the time interval (from currentTime - 3600000 to currentTime )
 			xhttp2.open('GET', 'http://demo.thingsboard.io/api/plugins/telemetry/DEVICE/032c2cf0-6ad0-11ea-ad02-b3576b7d39f1/values/timeseries?keys=windDirection,device&startTs='+ olderTime + '&endTs=' + currentTime + '&limit=60&agg=AVG');
 			xhttp2.setRequestHeader('Content-Type', 'application/json');
-			xhttp2.setRequestHeader('X-Authorization', 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbmRyZXc5NmZlcnJhcmFAaG90bWFpbC5pdCIsInNjb3BlcyI6WyJURU5BTlRfQURNSU4iXSwidXNlcklkIjoiZDg0MjI3MTAtNmFjZi0xMWVhLThlMGEtN2QwZWYyYTY4MmQzIiwiZmlyc3ROYW1lIjoiQW5kcmVhIiwibGFzdE5hbWUiOiJGZXJyYXJhIiwiZW5hYmxlZCI6dHJ1ZSwicHJpdmFjeVBvbGljeUFjY2VwdGVkIjp0cnVlLCJpc1B1YmxpYyI6ZmFsc2UsInRlbmFudElkIjoiZDgwNDVhYzAtNmFjZi0xMWVhLThlMGEtN2QwZWYyYTY4MmQzIiwiY3VzdG9tZXJJZCI6IjEzODE0MDAwLTFkZDItMTFiMi04MDgwLTgwODA4MDgwODA4MCIsImlzcyI6InRoaW5nc2JvYXJkLmlvIiwiaWF0IjoxNTg0NzM0NjUwLCJleHAiOjE1ODY1MzQ2NTB9.6kt8qRAVodFIWqcSZYOzAExVgHJpPcWH0gLghfLm3Sbt3jLLW7rnkOMsL9RRmmDo8-XD38k0qqW67mjwB2Z1HQ');
+			xhttp2.setRequestHeader('X-Authorization', 'Bearer XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
 			xhttp2.send();
 			xhttp2.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
@@ -636,7 +636,7 @@
 								
 								cell0.innerHTML = Number(dir[i].ts);
 								cell1.innerHTML = formattedTime;
-								cell2.innerHTML = dir[i].value + "�";
+								cell2.innerHTML = dir[i].value + "째";
 								cell3.innerHTML = dev[i].value;
 
 					}
@@ -660,7 +660,7 @@
             var xhttp = new XMLHttpRequest();			//First Get Request to get wind Intensity telemetries from first device; it needs device ID, keys, and the time interval (from currentTime - 3600000 to currentTime )
 			xhttp.open('GET', 'http://demo.thingsboard.io/api/plugins/telemetry/DEVICE/0324b2e0-6ad0-11ea-ad02-b3576b7d39f1/values/timeseries?keys=windIntensity,device&startTs='+ olderTime + '&endTs=' + currentTime + '&limit=60&agg=AVG');
 			xhttp.setRequestHeader('Content-Type', 'application/json');
-			xhttp.setRequestHeader('X-Authorization', 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbmRyZXc5NmZlcnJhcmFAaG90bWFpbC5pdCIsInNjb3BlcyI6WyJURU5BTlRfQURNSU4iXSwidXNlcklkIjoiZDg0MjI3MTAtNmFjZi0xMWVhLThlMGEtN2QwZWYyYTY4MmQzIiwiZmlyc3ROYW1lIjoiQW5kcmVhIiwibGFzdE5hbWUiOiJGZXJyYXJhIiwiZW5hYmxlZCI6dHJ1ZSwicHJpdmFjeVBvbGljeUFjY2VwdGVkIjp0cnVlLCJpc1B1YmxpYyI6ZmFsc2UsInRlbmFudElkIjoiZDgwNDVhYzAtNmFjZi0xMWVhLThlMGEtN2QwZWYyYTY4MmQzIiwiY3VzdG9tZXJJZCI6IjEzODE0MDAwLTFkZDItMTFiMi04MDgwLTgwODA4MDgwODA4MCIsImlzcyI6InRoaW5nc2JvYXJkLmlvIiwiaWF0IjoxNTg0NzM0NjUwLCJleHAiOjE1ODY1MzQ2NTB9.6kt8qRAVodFIWqcSZYOzAExVgHJpPcWH0gLghfLm3Sbt3jLLW7rnkOMsL9RRmmDo8-XD38k0qqW67mjwB2Z1HQ');
+			xhttp.setRequestHeader('X-Authorization', 'Bearer XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
 			xhttp.send();
 			xhttp.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
@@ -715,7 +715,7 @@
 			var xhttp2 = new XMLHttpRequest();			//Second Get Request to get wind Intensity telemetries from second device; it needs device ID, keys, and the time interval (from currentTime - 3600000 to currentTime )
 			xhttp2.open('GET', 'http://demo.thingsboard.io/api/plugins/telemetry/DEVICE/032c2cf0-6ad0-11ea-ad02-b3576b7d39f1/values/timeseries?keys=windIntensity,device&startTs='+ olderTime + '&endTs=' + currentTime + '&limit=60&agg=AVG');
 			xhttp2.setRequestHeader('Content-Type', 'application/json');
-			xhttp2.setRequestHeader('X-Authorization', 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbmRyZXc5NmZlcnJhcmFAaG90bWFpbC5pdCIsInNjb3BlcyI6WyJURU5BTlRfQURNSU4iXSwidXNlcklkIjoiZDg0MjI3MTAtNmFjZi0xMWVhLThlMGEtN2QwZWYyYTY4MmQzIiwiZmlyc3ROYW1lIjoiQW5kcmVhIiwibGFzdE5hbWUiOiJGZXJyYXJhIiwiZW5hYmxlZCI6dHJ1ZSwicHJpdmFjeVBvbGljeUFjY2VwdGVkIjp0cnVlLCJpc1B1YmxpYyI6ZmFsc2UsInRlbmFudElkIjoiZDgwNDVhYzAtNmFjZi0xMWVhLThlMGEtN2QwZWYyYTY4MmQzIiwiY3VzdG9tZXJJZCI6IjEzODE0MDAwLTFkZDItMTFiMi04MDgwLTgwODA4MDgwODA4MCIsImlzcyI6InRoaW5nc2JvYXJkLmlvIiwiaWF0IjoxNTg0NzM0NjUwLCJleHAiOjE1ODY1MzQ2NTB9.6kt8qRAVodFIWqcSZYOzAExVgHJpPcWH0gLghfLm3Sbt3jLLW7rnkOMsL9RRmmDo8-XD38k0qqW67mjwB2Z1HQ');
+			xhttp2.setRequestHeader('X-Authorization', 'Bearer XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
 			xhttp2.send();
 			xhttp2.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
@@ -778,7 +778,7 @@
             var xhttp = new XMLHttpRequest();			//First Get Request to get rain telemetries from first device; it needs device ID, keys, and the time interval (from currentTime - 3600000 to currentTime )
 			xhttp.open('GET', 'http://demo.thingsboard.io/api/plugins/telemetry/DEVICE/0324b2e0-6ad0-11ea-ad02-b3576b7d39f1/values/timeseries?keys=rainHeight,device&startTs='+ olderTime + '&endTs=' + currentTime + '&limit=60&agg=AVG');
 			xhttp.setRequestHeader('Content-Type', 'application/json');
-			xhttp.setRequestHeader('X-Authorization', 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbmRyZXc5NmZlcnJhcmFAaG90bWFpbC5pdCIsInNjb3BlcyI6WyJURU5BTlRfQURNSU4iXSwidXNlcklkIjoiZDg0MjI3MTAtNmFjZi0xMWVhLThlMGEtN2QwZWYyYTY4MmQzIiwiZmlyc3ROYW1lIjoiQW5kcmVhIiwibGFzdE5hbWUiOiJGZXJyYXJhIiwiZW5hYmxlZCI6dHJ1ZSwicHJpdmFjeVBvbGljeUFjY2VwdGVkIjp0cnVlLCJpc1B1YmxpYyI6ZmFsc2UsInRlbmFudElkIjoiZDgwNDVhYzAtNmFjZi0xMWVhLThlMGEtN2QwZWYyYTY4MmQzIiwiY3VzdG9tZXJJZCI6IjEzODE0MDAwLTFkZDItMTFiMi04MDgwLTgwODA4MDgwODA4MCIsImlzcyI6InRoaW5nc2JvYXJkLmlvIiwiaWF0IjoxNTg0NzM0NjUwLCJleHAiOjE1ODY1MzQ2NTB9.6kt8qRAVodFIWqcSZYOzAExVgHJpPcWH0gLghfLm3Sbt3jLLW7rnkOMsL9RRmmDo8-XD38k0qqW67mjwB2Z1HQ');
+			xhttp.setRequestHeader('X-Authorization', 'Bearer XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
 			xhttp.send();
 			xhttp.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
@@ -832,7 +832,7 @@
 			var xhttp2 = new XMLHttpRequest();			//Second Get Request to get rain telemetries from second device; it needs device ID, keys, and the time interval (from currentTime - 3600000 to currentTime )
 			xhttp2.open('GET', 'http://demo.thingsboard.io/api/plugins/telemetry/DEVICE/032c2cf0-6ad0-11ea-ad02-b3576b7d39f1/values/timeseries?keys=rainHeight,device&startTs='+ olderTime + '&endTs=' + currentTime + '&limit=60&agg=AVG');
 			xhttp2.setRequestHeader('Content-Type', 'application/json');
-			xhttp2.setRequestHeader('X-Authorization', 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbmRyZXc5NmZlcnJhcmFAaG90bWFpbC5pdCIsInNjb3BlcyI6WyJURU5BTlRfQURNSU4iXSwidXNlcklkIjoiZDg0MjI3MTAtNmFjZi0xMWVhLThlMGEtN2QwZWYyYTY4MmQzIiwiZmlyc3ROYW1lIjoiQW5kcmVhIiwibGFzdE5hbWUiOiJGZXJyYXJhIiwiZW5hYmxlZCI6dHJ1ZSwicHJpdmFjeVBvbGljeUFjY2VwdGVkIjp0cnVlLCJpc1B1YmxpYyI6ZmFsc2UsInRlbmFudElkIjoiZDgwNDVhYzAtNmFjZi0xMWVhLThlMGEtN2QwZWYyYTY4MmQzIiwiY3VzdG9tZXJJZCI6IjEzODE0MDAwLTFkZDItMTFiMi04MDgwLTgwODA4MDgwODA4MCIsImlzcyI6InRoaW5nc2JvYXJkLmlvIiwiaWF0IjoxNTg0NzM0NjUwLCJleHAiOjE1ODY1MzQ2NTB9.6kt8qRAVodFIWqcSZYOzAExVgHJpPcWH0gLghfLm3Sbt3jLLW7rnkOMsL9RRmmDo8-XD38k0qqW67mjwB2Z1HQ');
+			xhttp2.setRequestHeader('X-Authorization', 'Bearer XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
 			xhttp2.send();
 			xhttp2.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
