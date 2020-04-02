@@ -1,5 +1,7 @@
 ### IoT-1887505
 
+Andrea Gaetano Ferrara mat.1887505
+
 ##### The project
 
 This repository contains all the files and links needed for the creation of a Cloud-based IoT system that collects information from a set of virtual environmental sensors using the MQTT protocol. As a first part there are some clients written in node.js code that create random values to send to them to the **Thingsboard** cloud broker so we can show them in a web dashboard. Subsequently we will use the RIOT OS to create the clients in a MQTT-SN system, and since they cannot communicate to the cloud broker directly we need the PAHO transparent gateway.
