@@ -30,6 +30,7 @@
 #include "net/emcute.h"
 #include "net/ipv6/addr.h"
 
+//Libraries needed to access the temperature sensor
 #include "periph/i2c.h"
 #include "lpsxxx.h"
 #include "/home/andrea/Tutorials/RIOT/drivers/lpsxxx/include/lpsxxx_params.h"
@@ -44,7 +45,7 @@
 #define NUMOFSUBS           (16U)
 #define TOPIC_MAXLEN        (64U)
 
-static lpsxxx_t lpsxxx;
+static lpsxxx_t lpsxxx; //creating a variable for the sensor
 
 int generate_random_temp(void) { //this will generate random number in range l and r
     int l = -50;
@@ -139,7 +140,7 @@ static unsigned get_qos(const char *str)
     }
 }
 
-static int cmd_con(int argc, char **argv)
+static int cmd_con(int argc, char **argv) //connect cmd
 {
 
     sock_udp_ep_t gw = { .family = AF_INET6, .port = EMCUTE_PORT };
@@ -178,7 +179,7 @@ static int cmd_con(int argc, char **argv)
     return 0;
 }
 
-static int cmd_discon(int argc, char **argv)
+static int cmd_discon(int argc, char **argv) //disconnection cmd
 {
     (void)argc;
     (void)argv;
@@ -196,7 +197,7 @@ static int cmd_discon(int argc, char **argv)
     return 0;
 }
 
-static int cmd_pub(int argc, char **argv)
+static int cmd_pub(int argc, char **argv) //publish cmd
 {
     emcute_topic_t t;
     unsigned flags = EMCUTE_QOS_0;
@@ -205,12 +206,12 @@ static int cmd_pub(int argc, char **argv)
 
     unsigned long long int ts = ((unsigned long long)time(NULL)) * 1000;
 
-    lpsxxx_init(&lpsxxx, &lpsxxx_params[0]);
+    lpsxxx_init(&lpsxxx, &lpsxxx_params[0]); //initializing the variable
 
-    int16_t tempr = 0;
-    lpsxxx_read_temp(&lpsxxx, &tempr);
+    int16_t tempr = 0; //new tempr variable of type int16_t
+    lpsxxx_read_temp(&lpsxxx, &tempr); // reading the temperature calling the sensor read temp function
     char argomento[200];
-    sprintf(argomento, "{\"ts\": %llu, \"values\":{\"device\": \"%d\",\"temperature\": \"%u\"}}", ts, 1, (tempr / 100));
+    sprintf(argomento, "{\"ts\": %llu, \"values\":{\"device\": \"%d\",\"temperature\": \"%u\"}}", ts, 1, (tempr / 100)); //passing the temperature as argument for the publish
 
     if (argc < 3) {
         printf("usage: %s <topic name> <data> [QoS level]\n", argv[0]);
@@ -245,7 +246,7 @@ static int cmd_pub(int argc, char **argv)
 }
 
 
-static int cmd_sub(int argc, char **argv)
+static int cmd_sub(int argc, char **argv) //subscription cmd
 {
     unsigned flags = EMCUTE_QOS_0;
 
@@ -282,7 +283,7 @@ static int cmd_sub(int argc, char **argv)
     return 0;
 }
 
-static int cmd_unsub(int argc, char **argv)
+static int cmd_unsub(int argc, char **argv) // unsubscription cmd
 {
     if (argc < 2) {
         printf("usage %s <topic name>\n", argv[0]);
@@ -308,7 +309,7 @@ static int cmd_unsub(int argc, char **argv)
     return 1;
 }
 
-static int cmd_will(int argc, char **argv)
+static int cmd_will(int argc, char **argv) //last will cmd
 {
     if (argc < 3) {
         printf("usage %s <will topic name> <will message content>\n", argv[0]);
