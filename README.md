@@ -33,8 +33,8 @@ Finally we will make some changes to the HTML file of the first assignment.
 
 Below there are the links that bring you to the tutorial of the whole process as well as a short video of the implementation and the technology used.
 
-[Youtube video link]
+[Youtube video link](https://www.youtube.com/watch?v=CBi96h9ubBE)
 
-[LinkedIn article]
+[LinkedIn article](https://www.linkedin.com/pulse/emulate-virtual-environmental-sensors-riot-os-publish-ferrara/?published=t)
 
 ### End
