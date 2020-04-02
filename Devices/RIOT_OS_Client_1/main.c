@@ -135,7 +135,7 @@ static unsigned get_qos(const char *str)
     }
 }
 
-static int cmd_con(int argc, char **argv)
+static int cmd_con(int argc, char **argv) //shell command for connection
 {
     sock_udp_ep_t gw = { .family = AF_INET6, .port = EMCUTE_PORT };
     char *topic = NULL;
@@ -173,7 +173,7 @@ static int cmd_con(int argc, char **argv)
     return 0;
 }
 
-static int cmd_discon(int argc, char **argv)
+static int cmd_discon(int argc, char **argv) //shell command for disconnection
 {
     (void)argc;
     (void)argv;
@@ -191,7 +191,7 @@ static int cmd_discon(int argc, char **argv)
     return 0;
 }
 
-static int cmd_pub(int argc, char **argv)
+static int cmd_pub(int argc, char **argv) //shell command for publish
 {
     emcute_topic_t t;
     unsigned flags = EMCUTE_QOS_0;
@@ -228,7 +228,7 @@ static int cmd_pub(int argc, char **argv)
     return 0;
 }
 
-static int cmd_loop(int argc, char **argv)  /*argv[0] = command, argv[1] = topic, argv[2] = data, argv[3] = flags*/
+static int cmd_loop(int argc, char **argv)  /*argv[0] = command, argv[1] = topic, argv[2] = data, argv[3] = flags, new created command for looping*/
 {
     emcute_topic_t t;
     unsigned flags = EMCUTE_QOS_0;
@@ -292,7 +292,7 @@ static int cmd_loop(int argc, char **argv)  /*argv[0] = command, argv[1] = topic
     return 0;
 }
 
-static int cmd_sub(int argc, char **argv)
+static int cmd_sub(int argc, char **argv) //shell command for subscription
 {
     unsigned flags = EMCUTE_QOS_0;
 
@@ -329,7 +329,7 @@ static int cmd_sub(int argc, char **argv)
     return 0;
 }
 
-static int cmd_unsub(int argc, char **argv)
+static int cmd_unsub(int argc, char **argv) //shell command to un-subscribe
 {
     if (argc < 2) {
         printf("usage %s <topic name>\n", argv[0]);
@@ -355,7 +355,7 @@ static int cmd_unsub(int argc, char **argv)
     return 1;
 }
 
-static int cmd_will(int argc, char **argv)
+static int cmd_will(int argc, char **argv) //shell command for last will message
 {
     if (argc < 3) {
         printf("usage %s <will topic name> <will message content>\n", argv[0]);
@@ -379,7 +379,7 @@ static const shell_command_t shell_commands[] = {
     { "con", "connect to MQTT broker", cmd_con },
     { "discon", "disconnect from the current broker", cmd_discon },
     { "pub", "publish something", cmd_pub },
-    { "loop", "start looping publish", cmd_loop },
+    { "loop", "start looping publish", cmd_loop }, //the new command
     { "sub", "subscribe topic", cmd_sub },
     { "unsub", "unsubscribe from topic", cmd_unsub },
     { "will", "register a last will", cmd_will },
