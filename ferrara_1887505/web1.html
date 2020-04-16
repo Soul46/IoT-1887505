@@ -13,7 +13,7 @@
 
 
         function RealtimeDevice1() {
-            var token = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+            var token = "";
             var entityId = "0324b2e0-6ad0-11ea-ad02-b3576b7d39f1";
             var webSocket = new WebSocket("wss://demo.thingsboard.io/api/ws/plugins/telemetry?token=" + token);
 
@@ -67,7 +67,7 @@
         }
 
 		function RealtimeDevice2() {
-            var token = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+            var token = "";
             var entityId = "032c2cf0-6ad0-11ea-ad02-b3576b7d39f1";
             var webSocket = new WebSocket("wss://demo.thingsboard.io/api/ws/plugins/telemetry?token=" + token);
 
@@ -301,11 +301,83 @@
 			}
 		  }
 	}
-	    
-	    	function sortTableRiot() {
+
+	function sortTableRiot() {
 		console.log("sorting");
 		  var table, rows, switching, i, x, y, shouldSwitch;
 		  table = document.getElementById("TabRiot");
+		  switching = true;
+		  /*Make a loop that will continue until
+		  no switching has been done:*/
+		  while (switching) {
+			//start by saying: no switching is done:
+			switching = false;
+			rows = table.rows;
+			/*Loop through all table rows (except the
+			first, which contains table headers):*/
+			for (i = 1; i < (rows.length - 1); i++) {
+			  //start by saying there should be no switching:
+			  shouldSwitch = false;
+			  /*Get the two elements you want to compare,
+			  one from current row and one from the next:*/
+			  x = rows[i].getElementsByTagName("TD")[0];
+			  y = rows[i + 1].getElementsByTagName("TD")[0];
+			  //check if the two rows should switch place:
+			  if (Number(x.innerHTML) < Number(y.innerHTML)) {
+				//if so, mark as a switch and break the loop:
+				shouldSwitch = true;
+				break;
+			  }
+			}
+			if (shouldSwitch) {
+			  /*If a switch has been marked, make the switch
+			  and mark that a switch has been done:*/
+			  rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+			  switching = true;
+			}
+		  }
+	}
+
+	function sortTableLoramac() {
+		console.log("sorting");
+		  var table, rows, switching, i, x, y, shouldSwitch;
+		  table = document.getElementById("TabLoramac");
+		  switching = true;
+		  /*Make a loop that will continue until
+		  no switching has been done:*/
+		  while (switching) {
+			//start by saying: no switching is done:
+			switching = false;
+			rows = table.rows;
+			/*Loop through all table rows (except the
+			first, which contains table headers):*/
+			for (i = 1; i < (rows.length - 1); i++) {
+			  //start by saying there should be no switching:
+			  shouldSwitch = false;
+			  /*Get the two elements you want to compare,
+			  one from current row and one from the next:*/
+			  x = rows[i].getElementsByTagName("TD")[0];
+			  y = rows[i + 1].getElementsByTagName("TD")[0];
+			  //check if the two rows should switch place:
+			  if (Number(x.innerHTML) < Number(y.innerHTML)) {
+				//if so, mark as a switch and break the loop:
+				shouldSwitch = true;
+				break;
+			  }
+			}
+			if (shouldSwitch) {
+			  /*If a switch has been marked, make the switch
+			  and mark that a switch has been done:*/
+			  rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+			  switching = true;
+			}
+		  }
+	}
+
+		function sortTableSensors() {
+		console.log("sorting");
+		  var table, rows, switching, i, x, y, shouldSwitch;
+		  table = document.getElementById("TabSensors");
 		  switching = true;
 		  /*Make a loop that will continue until
 		  no switching has been done:*/
@@ -348,7 +420,7 @@
             var xhttp = new XMLHttpRequest();			//First Get Request to get temperature telemetries from first device; it needs device ID, keys, and the time interval (from currentTime - 3600000 to currentTime )
 			xhttp.open('GET', 'http://demo.thingsboard.io/api/plugins/telemetry/DEVICE/0324b2e0-6ad0-11ea-ad02-b3576b7d39f1/values/timeseries?keys=temperature,device&startTs='+ olderTime + '&endTs=' + currentTime + '&limit=60&agg=AVG');
 			xhttp.setRequestHeader('Content-Type', 'application/json');
-			xhttp.setRequestHeader('X-Authorization', 'Bearer XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'); //X-Authorization to access thingsboard account
+			xhttp.setRequestHeader('X-Authorization', 'Bearer '); //X-Authorization to access thingsboard account
 			xhttp.send();
 			xhttp.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
@@ -401,7 +473,7 @@
 			var xhttp2 = new XMLHttpRequest();			//Second Get Request to get temperature telemetries from second device; it needs device ID, keys, and the time interval (from currentTime - 336000000 to currentTime )
 			xhttp2.open('GET', 'http://demo.thingsboard.io/api/plugins/telemetry/DEVICE/032c2cf0-6ad0-11ea-ad02-b3576b7d39f1/values/timeseries?keys=temperature,device&startTs='+ olderTime + '&endTs=' + currentTime + '&limit=60&agg=AVG');
 			xhttp2.setRequestHeader('Content-Type', 'application/json');
-			xhttp2.setRequestHeader('X-Authorization', 'Bearer XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+			xhttp2.setRequestHeader('X-Authorization', 'Bearer ');
 			xhttp2.send();
 			xhttp2.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
@@ -463,7 +535,7 @@
             var xhttp = new XMLHttpRequest();		//First Get Request to get humidity telemetries from first device; it needs device ID, keys, and the time interval (from currentTime - 3600000 to currentTime )
 			xhttp.open('GET', 'http://demo.thingsboard.io/api/plugins/telemetry/DEVICE/0324b2e0-6ad0-11ea-ad02-b3576b7d39f1/values/timeseries?keys=humidity,device&startTs='+ olderTime + '&endTs=' + currentTime + '&limit=60&agg=AVG');
 			xhttp.setRequestHeader('Content-Type', 'application/json');
-			xhttp.setRequestHeader('X-Authorization', 'Bearer XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+			xhttp.setRequestHeader('X-Authorization', 'Bearer ');
 			xhttp.send();
 			xhttp.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
@@ -517,7 +589,7 @@
 			var xhttp2 = new XMLHttpRequest();			//Second Get Request to get humidity telemetries from second device; it needs device ID, keys, and the time interval (from currentTime - 3600000 to currentTime )
 			xhttp2.open('GET', 'http://demo.thingsboard.io/api/plugins/telemetry/DEVICE/032c2cf0-6ad0-11ea-ad02-b3576b7d39f1/values/timeseries?keys=humidity,device&startTs='+ olderTime + '&endTs=' + currentTime + '&limit=60&agg=AVG');
 			xhttp2.setRequestHeader('Content-Type', 'application/json');
-			xhttp2.setRequestHeader('X-Authorization', 'Bearer XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+			xhttp2.setRequestHeader('X-Authorization', 'Bearer ');
 			xhttp2.send();
 			xhttp2.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
@@ -579,7 +651,7 @@
             var xhttp = new XMLHttpRequest();			//First Get Request to get wind Direction telemetries from first device; it needs device ID, keys, and the time interval (from currentTime - 3600000 to currentTime )
 			xhttp.open('GET', 'http://demo.thingsboard.io/api/plugins/telemetry/DEVICE/0324b2e0-6ad0-11ea-ad02-b3576b7d39f1/values/timeseries?keys=windDirection,device&startTs='+ olderTime + '&endTs=' + currentTime + '&limit=60&agg=AVG');
 			xhttp.setRequestHeader('Content-Type', 'application/json');
-			xhttp.setRequestHeader('X-Authorization', 'Bearer XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+			xhttp.setRequestHeader('X-Authorization', 'Bearer ');
 			xhttp.send();
 			xhttp.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
@@ -633,7 +705,7 @@
 			var xhttp2 = new XMLHttpRequest();			//Second Get Request to get wind Direction telemetries from second device; it needs device ID, keys, and the time interval (from currentTime - 3600000 to currentTime )
 			xhttp2.open('GET', 'http://demo.thingsboard.io/api/plugins/telemetry/DEVICE/032c2cf0-6ad0-11ea-ad02-b3576b7d39f1/values/timeseries?keys=windDirection,device&startTs='+ olderTime + '&endTs=' + currentTime + '&limit=60&agg=AVG');
 			xhttp2.setRequestHeader('Content-Type', 'application/json');
-			xhttp2.setRequestHeader('X-Authorization', 'Bearer XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+			xhttp2.setRequestHeader('X-Authorization', 'Bearer ');
 			xhttp2.send();
 			xhttp2.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
@@ -696,7 +768,7 @@
             var xhttp = new XMLHttpRequest();			//First Get Request to get wind Intensity telemetries from first device; it needs device ID, keys, and the time interval (from currentTime - 3600000 to currentTime )
 			xhttp.open('GET', 'http://demo.thingsboard.io/api/plugins/telemetry/DEVICE/0324b2e0-6ad0-11ea-ad02-b3576b7d39f1/values/timeseries?keys=windIntensity,device&startTs='+ olderTime + '&endTs=' + currentTime + '&limit=60&agg=AVG');
 			xhttp.setRequestHeader('Content-Type', 'application/json');
-			xhttp.setRequestHeader('X-Authorization', 'Bearer XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+			xhttp.setRequestHeader('X-Authorization', 'Bearer ');
 			xhttp.send();
 			xhttp.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
@@ -751,7 +823,7 @@
 			var xhttp2 = new XMLHttpRequest();			//Second Get Request to get wind Intensity telemetries from second device; it needs device ID, keys, and the time interval (from currentTime - 3600000 to currentTime )
 			xhttp2.open('GET', 'http://demo.thingsboard.io/api/plugins/telemetry/DEVICE/032c2cf0-6ad0-11ea-ad02-b3576b7d39f1/values/timeseries?keys=windIntensity,device&startTs='+ olderTime + '&endTs=' + currentTime + '&limit=60&agg=AVG');
 			xhttp2.setRequestHeader('Content-Type', 'application/json');
-			xhttp2.setRequestHeader('X-Authorization', 'Bearer XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+			xhttp2.setRequestHeader('X-Authorization', 'Bearer ');
 			xhttp2.send();
 			xhttp2.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
@@ -814,7 +886,7 @@
             var xhttp = new XMLHttpRequest();			//First Get Request to get rain telemetries from first device; it needs device ID, keys, and the time interval (from currentTime - 3600000 to currentTime )
 			xhttp.open('GET', 'http://demo.thingsboard.io/api/plugins/telemetry/DEVICE/0324b2e0-6ad0-11ea-ad02-b3576b7d39f1/values/timeseries?keys=rainHeight,device&startTs='+ olderTime + '&endTs=' + currentTime + '&limit=60&agg=AVG');
 			xhttp.setRequestHeader('Content-Type', 'application/json');
-			xhttp.setRequestHeader('X-Authorization', 'Bearer XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+			xhttp.setRequestHeader('X-Authorization', 'Bearer ');
 			xhttp.send();
 			xhttp.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
@@ -868,7 +940,7 @@
 			var xhttp2 = new XMLHttpRequest();			//Second Get Request to get rain telemetries from second device; it needs device ID, keys, and the time interval (from currentTime - 3600000 to currentTime )
 			xhttp2.open('GET', 'http://demo.thingsboard.io/api/plugins/telemetry/DEVICE/032c2cf0-6ad0-11ea-ad02-b3576b7d39f1/values/timeseries?keys=rainHeight,device&startTs='+ olderTime + '&endTs=' + currentTime + '&limit=60&agg=AVG');
 			xhttp2.setRequestHeader('Content-Type', 'application/json');
-			xhttp2.setRequestHeader('X-Authorization', 'Bearer XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+			xhttp2.setRequestHeader('X-Authorization', 'Bearer ');
 			xhttp2.send();
 			xhttp2.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
@@ -920,8 +992,264 @@
 
 
 		}
-	    
-	    		function LastHourRiot() {			//Displays the last hour values for Rain Height from both devices
+
+		function LastHourLoramac() {			//Displays the last hour values for Rain Height from both devices
+
+			var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+			var currentTime = new Date().getTime();
+			var olderTime = currentTime - 3600000;
+
+
+            var xhttp = new XMLHttpRequest();			//First Get Request to get rain telemetries from first device; it needs device ID, keys, and the time interval (from currentTime - 3600000 to currentTime )
+			xhttp.open('GET', 'http://cloud.thingsboard.io/api/plugins/telemetry/DEVICE/91975030-7824-11ea-b99e-a33d0c6d5511/values/timeseries?keys=temperature,humidity,windDirection,windIntensity,rainHeight,device&startTs='+ olderTime + '&endTs=' + currentTime + '&limit=20&agg=AVG');
+			xhttp.setRequestHeader('Content-Type', 'application/json');
+			xhttp.setRequestHeader('X-Authorization', 'Bearer ');
+			xhttp.send();
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					var response = JSON.parse(this.responseText);
+
+
+					//storing parsed results in corresponding vectors, so we can access the data.
+				var temp = response.temperature;
+				var hum = response.humidity;
+				var dir = response.windDirection;
+				var int = response.windIntensity;
+				var rain = response.rainHeight;
+				var dev = response.device;
+
+					for (var i = 0; i < rain.length; i++) {			//For cycle to build TabRain table.	
+
+							var table = document.getElementById("TabLoramac");
+
+							var row = table.insertRow();
+
+							var cell0 = row.insertCell(0);
+							var cell1 = row.insertCell(1);
+							var cell2 = row.insertCell(2);
+							var cell3 = row.insertCell(3);
+							var cell4 = row.insertCell(4);
+							var cell5 = row.insertCell(5);
+							var cell6 = row.insertCell(6);
+
+							var date = new Date(rain[i].ts);
+							var year = date.getFullYear();
+							var month = months[date.getMonth()];
+							var day = date.getDate();
+							// Hours part from the timestamp
+							var hours = date.getHours();
+							// Minutes part from the timestamp
+							var minutes = date.getMinutes();
+							// Seconds part from the timestamp
+							var seconds = date.getSeconds();
+							var milliseconds = date.getMilliseconds();
+
+							// Will display timestamp in a human-friendly format
+							var formattedTime = day + " " + month + " " + year + " " + hours + ' : ' + minutes + 'm : ' + seconds + "s : " + milliseconds + "ms";
+					
+							cell0.innerHTML = Number(rain[i].ts);
+							cell1.innerHTML = temp[i].value + "°";
+							cell2.innerHTML = hum[i].value + "%";
+							cell3.innerHTML = dir[i].value + "°";
+							cell4.innerHTML = int[i].value + "m/s";
+							cell5.innerHTML = rain[i].value + "mm/h";
+							cell6.innerHTML = dev[i].value;
+
+						}
+
+						console.log(response);
+					
+				}
+
+			};
+
+
+			var xhttp2 = new XMLHttpRequest();			//Second Get Request to get rain telemetries from second device; it needs device ID, keys, and the time interval (from currentTime - 3600000 to currentTime )
+			xhttp2.open('GET', 'http://cloud.thingsboard.io/api/plugins/telemetry/DEVICE/70437bf0-7b37-11ea-b99e-a33d0c6d5511/values/timeseries?keys=temperature,humidity,windDirection,windIntensity,rainHeight,device&startTs='+ olderTime + '&endTs=' + currentTime + '&limit=20&agg=AVG');
+			xhttp2.setRequestHeader('Content-Type', 'application/json');
+			xhttp2.setRequestHeader('X-Authorization', 'Bearer ');
+			xhttp2.send();
+			xhttp2.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					var response = JSON.parse(this.responseText);
+
+
+					//storing parsed results in corresponding vectors, so we can access the data.
+				var temp = response.temperature;
+				var hum = response.humidity;
+				var dir = response.windDirection;
+				var int = response.windIntensity;
+				var rain = response.rainHeight;
+				var dev = response.device;
+
+					for (var i = 0; i < rain.length; i++) {			//For cycle to build TabRain table.	
+
+							var table = document.getElementById("TabLoramac");
+
+							var row = table.insertRow();
+
+							var cell0 = row.insertCell(0);
+							var cell1 = row.insertCell(1);
+							var cell2 = row.insertCell(2);
+							var cell3 = row.insertCell(3);
+							var cell4 = row.insertCell(4);
+							var cell5 = row.insertCell(5);
+							var cell6 = row.insertCell(6);
+
+								var date = new Date(rain[i].ts);
+								var year = date.getFullYear();
+								var month = months[date.getMonth()];
+								var day = date.getDate();
+								// Hours part from the timestamp
+								var hours = date.getHours();
+								// Minutes part from the timestamp
+								var minutes = date.getMinutes();
+								// Seconds part from the timestamp
+								var seconds = date.getSeconds();
+								var milliseconds = date.getMilliseconds();
+
+								// Will display timestamp in a human-friendly format
+								var formattedTime = day + " " + month + " " + year + " " + hours + ' : ' + minutes + 'm : ' + seconds + "s : " + milliseconds + "ms";
+								
+								cell0.innerHTML = Number(rain[i].ts);
+								cell1.innerHTML = temp[i].value + "°";
+								cell2.innerHTML = hum[i].value + "%";
+								cell3.innerHTML = dir[i].value + "°";
+								cell4.innerHTML = int[i].value + "m/s";
+								cell5.innerHTML = rain[i].value + "mm/h";
+								cell6.innerHTML = dev[i].value;
+
+					}
+
+						//console.log(response);
+
+				}
+
+			};
+
+
+		}
+
+		function LastHourSensors() {			//Displays the last hour values for Rain Height from both devices
+
+			var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+			var currentTime = new Date().getTime();
+			var olderTime = currentTime - 3600000;
+
+
+            var xhttp = new XMLHttpRequest();			//First Get Request to get rain telemetries from first device; it needs device ID, keys, and the time interval (from currentTime - 3600000 to currentTime )
+			xhttp.open('GET', 'http://cloud.thingsboard.io/api/plugins/telemetry/DEVICE/cb2151a0-78df-11ea-b99e-a33d0c6d5511/values/timeseries?keys=temperature,humidity,device&startTs='+ olderTime + '&endTs=' + currentTime + '&limit=20&agg=AVG');
+			xhttp.setRequestHeader('Content-Type', 'application/json');
+			xhttp.setRequestHeader('X-Authorization', 'Bearer ');
+			xhttp.send();
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					var response = JSON.parse(this.responseText);
+
+
+					//storing parsed results in corresponding vectors, so we can access the data.
+				var temp = response.temperature;
+				var hum = response.humidity;
+				var dev = response.device;
+
+					for (var i = 0; i < temp.length; i++) {			//For cycle to build TabRain table.	
+
+							var table = document.getElementById("TabSensors");
+
+							var row = table.insertRow();
+
+							var cell0 = row.insertCell(0);
+							var cell1 = row.insertCell(1);
+							var cell2 = row.insertCell(2);
+							var cell3 = row.insertCell(3);
+
+							var date = new Date(temp[i].ts);
+							var year = date.getFullYear();
+							var month = months[date.getMonth()];
+							var day = date.getDate();
+							// Hours part from the timestamp
+							var hours = date.getHours();
+							// Minutes part from the timestamp
+							var minutes = date.getMinutes();
+							// Seconds part from the timestamp
+							var seconds = date.getSeconds();
+							var milliseconds = date.getMilliseconds();
+
+							// Will display timestamp in a human-friendly format
+							var formattedTime = day + " " + month + " " + year + " " + hours + ' : ' + minutes + 'm : ' + seconds + "s : " + milliseconds + "ms";
+					
+							cell0.innerHTML = Number(temp[i].ts);
+							cell1.innerHTML = temp[i].value + "°";
+							cell2.innerHTML = hum[i].value + "%";
+							cell3.innerHTML = dev[i].value;
+
+						}
+
+						console.log(response);
+					
+				}
+
+			};
+
+
+			var xhttp2 = new XMLHttpRequest();			//Second Get Request to get rain telemetries from second device; it needs device ID, keys, and the time interval (from currentTime - 3600000 to currentTime )
+			xhttp2.open('GET', 'http://cloud.thingsboard.io/api/plugins/telemetry/DEVICE/45c33460-7b37-11ea-b99e-a33d0c6d5511/values/timeseries?keys=temperature,humidity,device&startTs='+ olderTime + '&endTs=' + currentTime + '&limit=20&agg=AVG');
+			xhttp2.setRequestHeader('Content-Type', 'application/json');
+			xhttp2.setRequestHeader('X-Authorization', 'Bearer ');
+			xhttp2.send();
+			xhttp2.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					var response = JSON.parse(this.responseText);
+
+
+					//storing parsed results in corresponding vectors, so we can access the data.
+				var temp = response.temperature;
+				var hum = response.humidity;
+				var dev = response.device;
+
+					for (var i = 0; i < temp.length; i++) {			//For cycle to build TabRain table.	
+
+							var table = document.getElementById("TabSensors");
+
+							var row = table.insertRow();
+
+							var cell0 = row.insertCell(0);
+							var cell1 = row.insertCell(1);
+							var cell2 = row.insertCell(2);
+							var cell3 = row.insertCell(3);
+
+								var date = new Date(temp[i].ts);
+								var year = date.getFullYear();
+								var month = months[date.getMonth()];
+								var day = date.getDate();
+								// Hours part from the timestamp
+								var hours = date.getHours();
+								// Minutes part from the timestamp
+								var minutes = date.getMinutes();
+								// Seconds part from the timestamp
+								var seconds = date.getSeconds();
+								var milliseconds = date.getMilliseconds();
+
+								// Will display timestamp in a human-friendly format
+								var formattedTime = day + " " + month + " " + year + " " + hours + ' : ' + minutes + 'm : ' + seconds + "s : " + milliseconds + "ms";
+								
+								cell0.innerHTML = Number(temp[i].ts);
+								cell1.innerHTML = temp[i].value + "°";
+								cell2.innerHTML = hum[i].value + "%";
+								cell3.innerHTML = dev[i].value;
+
+					}
+
+						console.log(response);
+
+				}
+
+			};
+
+
+		}
+
+		function LastHourRiot() {			//Displays the last hour values for Rain Height from both devices
 
 			var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 			var currentTime = new Date().getTime();
@@ -931,7 +1259,7 @@
 			var xhttp = new XMLHttpRequest();			//First Get Request to get rain telemetries from first device; it needs device ID, keys, and the time interval (from currentTime - 3600000 to currentTime )
 			xhttp.open('GET', 'http://demo.thingsboard.io/api/plugins/telemetry/DEVICE/032eec10-6ad0-11ea-ad02-b3576b7d39f1/values/timeseries?keys=temperature,humidity,windDirection,windIntensity,rainHeight,device&startTs='+ olderTime + '&endTs=' + currentTime + '&limit=60&agg=AVG');
 			xhttp.setRequestHeader('Content-Type', 'application/json');
-			xhttp.setRequestHeader('X-Authorization', 'Bearer XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+			xhttp.setRequestHeader('X-Authorization', 'Bearer ');
 			xhttp.send();
 			xhttp.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
@@ -946,7 +1274,7 @@
 				var rain = response.rainHeight;
 				var dev = response.device;
 
-				for (var i = 0; i < rain.length; i++) {			//For cycle to build TabRiot table.	
+				for (var i = 0; i < rain.length; i++) {			//For cycle to build TabRain table.	
 
 						var table = document.getElementById("TabRiot");
 
@@ -998,7 +1326,7 @@
     </script>
 
 </head>
-<body onload="LastHourTemp(); LastHourHum(); LastHourDir(); LastHourInt(); LastHourRain(); LastHourRiot()" style="margin: 0px;">	<!-- On page load, execute funcions -->
+<body onload="LastHourTemp(); LastHourHum(); LastHourDir(); LastHourInt(); LastHourRain(); LastHourRiot(); LastHourLoramac(); LastHourSensors();" style="margin: 0px;">	<!-- On page load, execute funcions -->
 
 
 <div id="header" style="width: 100%; height: 300px;">
@@ -1008,6 +1336,8 @@
 	<a href="#TabInt"><i style="top: 150px" class="fas fa-smog fa-2x"></i></a>
 	<a href="#TabRain"><i style="top: 205px" class="fas fa-cloud-rain fa-2x"></i></a>
 	<a href="#TabRiot"><i style="top: 255px" class="fas fa-registered fa-2x"></i></a>
+	<a href="#header"><i id="up" style="position:fixed; bottom:30px; left: 50px" class="fas fa-chevron-circle-up fa-4x"></i></a>
+	
 
 	<h1 style="position: absolute;
     left: 40%;
@@ -1080,7 +1410,7 @@
 
 	</div>
 
-		<div style="position: relative; margin: 10px;">
+	<div style="position: relative; margin: 10px;">
 		<h3 style="text-align: center; position: relative;">Table of values for the last hour for Wind Intensity   <button onclick="sortTableI()">Sort per ts</button></h3>			<!--TabInt and sortTableI button-->
 
 		<table style="width: 127%" id="TabInt">
@@ -1094,7 +1424,7 @@
 
 	</div>
 
-		<div style="position: relative; margin: 10px;">
+	<div style="position: relative; margin: 10px;">
 		<h3 style="text-align: center; position: relative;">Table of values for the last hour for Rain Height   <button onclick="sortTableR()">Sort per ts</button></h3>				<!--TabRain and sortTableR button-->
 
 		<table style="width: 127%" id="TabRain">
@@ -1107,9 +1437,9 @@
 		</table>
 
 	</div>
-	
+
 	<div style="position: relative; margin: 10px;">
-		<h3 style="text-align: center; position: relative;">Table of values for the last hour for Riot-OS Devices   <button onclick="sortTableRiot()">Sort per ts</button></h3>				<!--TabRain and sortTableRiot button-->
+		<h3 style="text-align: center; position: relative;">Table of values for the last hour for Riot-OS Devices   <button onclick="sortTableRiot()">Sort per ts</button></h3>				<!--TabRiot and sortTableRiot button-->
 
 		<table style="width: 127%" id="TabRiot">
 			<tr>
@@ -1119,6 +1449,37 @@
 				<th>Wind Direction</th>
 				<th>wind Intensity</th>
 				<th>Rain Height</th>
+				<th>Device</th>
+			</tr>
+		</table>
+
+	</div>
+
+	<div style="position: relative; margin: 10px;">
+		<h3 style="text-align: center; position: relative;">Table of values for the last hour for virtual Devices with Lorawan   <button onclick="sortTableLoramac()">Sort per ts</button></h3>				<!--TabLoramac and sortTableLoramac button-->
+
+		<table style="width: 127%" id="TabLoramac">
+			<tr>
+				<th>ts</th>
+				<th>Temperature</th>
+				<th>Humidity</th>
+				<th>Wind Direction</th>
+				<th>wind Intensity</th>
+				<th>Rain Height</th>
+				<th>Device</th>
+			</tr>
+		</table>
+
+	</div>
+
+	<div style="position: relative; margin: 10px;">
+		<h3 style="text-align: center; position: relative;">Table of values for the last hour for real Devices with Lorawan   <button onclick="sortTableSensors()">Sort per ts</button></h3>				<!--TabSensors and sortTableSensors button-->
+
+		<table style="width: 127%" id="TabSensors">
+			<tr>
+				<th>ts</th>
+				<th>Temperature</th>
+				<th>Humidity</th>
 				<th>Device</th>
 			</tr>
 		</table>
