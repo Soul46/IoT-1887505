@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <h1></h1>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Ruadhan O'Donoghue">
+  <meta charset="UTF-8">
+</head>
+
+<body onload="prova1(); prova2();">
+  <div id="header">
+    <h1 id="title">Activity Recognition</h1>
+    <img style="width: 100%;" src="img.png">
+  </div>
+  <title>Accelerometer Sensor</title>
+  <div id="content">
+    <h1>Accelerometer</h1>
+    <button onclick="sensors(); createTable(); LatestCloudX(); LatestCloudY(); LatestCloudZ();LatestCloudAct();">Start</button>
+    <br/>
+    <link rel="stylesheet" href="main.css" type="text/css" media="screen, projection">
+    
+    
+    <br>
+    <div id="status">Click to get sensors measurements</div>
+    <div id="xAxis">Movement on X Axis</div>
+    <div id="yAxis">Movement on Y Axis</div>
+    <div id="zAxis">Movement on Z Axis</div>
+    <div id="isMoving">Waiting for sensors...</div>
+    <br>
+    <div id="xAvg">Waiting for X Axis average...</div>
+    <div id="yAvg">Waiting for Y Axis average...</div>
+    <div id="zAvg">Waiting for Z Axis average...</div>
+    <div id="totAvg">Signal Magnitude Area: </div>
+    <div id="movement">Waiting for measurements </div>
+
+    <h4>Latest Values for Edge</h4>
+  
+    <table id="myTable"><!--  creation of the first table -->
+      <tr> <!--  the first row is compsed by the following attributes-->
+    
+      <th>Value on X Axis</th>
+      <th>Value on Y Axis</th>
+      <th>Value on Z Axis</th>
+      </tr>
+    
+      <tr>  <!-- here I initialize an empty row that I will edit every time the telemetries update-->
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+    
+      </tr>
+    </table>
+
+    <h4>Latest Values for Cloud</h4>
+
+
+    <table id="myTable2"><!--  creation of the second table -->
+      <tr> <!--  the first row is compsed by the following attributes-->
+    
+      <th>Value on X Axis</th>
+      <th>Value on Y Axis</th>
+      <th>Value on Z Axis</th>
+      <th>Average</th>
+      <th>is Running</th>
+      </tr>
+    
+      <tr>  <!-- here I initialize an empty row that I will edit every time the telemetries update-->
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+        <td>NO DATA</td>
+      </tr>
+    </table>
+
+  </div> 
+  <br>
+  <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+
+  <div id="drop">
+    <span><h2>Select from the dropdown list the computation method</h2>
+  <select id ="ddl" name="ddl" onmousedown="this.value='';" onchange="jsFunction(this.value);"> <!-- Dropdown to change activity recognition function -->
+    <option value='empty'></option>
+    <option value='Cloud'>Cloud</option>
+    <option value='Edge'>Edge</option>
+  </select>
+</span>
+  </div>
+
+  <div style="display: none;" id="tableDiv1">
+    <h3 style="text-align: center; position: relative;">  Activity Recognition from Cloud broker</h3>				<!--Table for Activity recognition for cloud broker-->
+
+    <div id="table-wrapper">
+      <div id="table-scroll">
+        <table id="tabCloud">
+          <thead>
+            <tr>
+              <th style="width: 25%;">ts</th>
+              <th style="width: 25%;">Timestamp</th>
+              <th style="width: 25%;">Average Movement</th>
+              <th style="width: 25%;">is Running</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div style="display: none;" id="tableDiv2">
+    <h3 style="text-align: center; position: relative;">  Activity Recognition from Edge device</h3>				<!--Table for Activity recognition for edge device-->
+
+    <div id="table-wrapper">
+      <div id="table-scroll">
+        <table id="tabEdge">
+          <thead>
+            <tr>
+              <th>ts</th>
+              <th style="width: 25%;">Timestamp</th>
+              <th>Average on X</th>
+              <th>Average on Y</th>
+              <th>Average on Z</th>
+              <th>SMA</th>
+              <th>is Running</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+<script>
+
+  var xValues = [];
+  var yValues = [];
+  var zValues = [];
+  var timestamps = [];
+  var TS = [];
+  var tmpSma = [];
+  var smaValue = [];
+  var runningTable = [];
+
+function jsFunction(value) /* function from dropdown list */
+{
+
+    if (value=="Cloud"){
+      document.getElementById('tableDiv2').style.display = "none";
+      document.getElementById('tableDiv1').style.display = "block";  
+    };
+
+    if (value=="Edge"){
+      document.getElementById('tableDiv1').style.display = "none";
+      document.getElementById('tableDiv2').style.display = "block";  
+    };
+
+    if (value=="empty"){
+      document.getElementById('tableDiv1').style.display = "none";
+      document.getElementById('tableDiv2').style.display = "none";  
+    };
+}
+        function LatestCloudX() {
+            // X-Authorization token
+            var token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzdXBlcmFzZEBsaXZlLml0Iiwic2NvcGVzIjpbIlRFTkFOVF9BRE1JTiJdLCJ1c2VySWQiOiI1NzQ1NzFlMC05NDY4LTExZWEtYjk0Yi00YjhlYjhhMzhhNjciLCJmaXJzdE5hbWUiOiJBbmRyZWEiLCJsYXN0TmFtZSI6IkZlcnJhcmEiLCJlbmFibGVkIjp0cnVlLCJwcml2YWN5UG9saWN5QWNjZXB0ZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiI1NzMyZDQ0MC05NDY4LTExZWEtYjk0Yi00YjhlYjhhMzhhNjciLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoiY2xvdWQudGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE1ODkyOTg3MDIsImV4cCI6MTU5MTA5ODcwMn0.uSgMsReC1xj_FcTYRzUEvF_9Xe4QhZGUnfyLKP4U2ghEk7YU9bFKKV6JqdStrco2gPodYV58XqESVMmelGXtNQ";
+            var entityId = "46f7a340-95f2-11ea-b94b-4b8eb8a38a67"; //this is the device token taken from thingsboard
+            var webSocket = new WebSocket("wss://cloud.thingsboard.io/api/ws/plugins/telemetry?token=" + token);
+
+            webSocket.onopen = function () {
+                var object = {
+                    tsSubCmds: [
+                        {
+                            entityType: "DEVICE",
+                            entityId: entityId,
+                            scope: "LATEST_TELEMETRY",
+                            cmdId: 10
+                        }
+                    ],
+                    historyCmds: [],
+                    attrSubCmds: []
+                };
+                var data = JSON.stringify(object);
+                webSocket.send(data);
+
+            };
+
+            webSocket.onmessage = function (event) { //in this function I store the parsed data in msg
+                var received_msg = event.data;
+                var msg=JSON.parse(event.data);
+                var tempo= msg.data.axis[0][0];
+                var data = new Date(tempo);
+
+                var table = document.getElementById("myTable2");
+
+                table.rows[1].cells[0].innerHTML = msg.data.axis[0][1];  //in this way I add in each cell of the row sensor's data
+
+            };
+
+            webSocket.onclose = function (event) {
+                alert("Connection is closed!");
+            };
+        }
+
+        function LatestCloudY() {
+            // X-Authorization token
+            var token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzdXBlcmFzZEBsaXZlLml0Iiwic2NvcGVzIjpbIlRFTkFOVF9BRE1JTiJdLCJ1c2VySWQiOiI1NzQ1NzFlMC05NDY4LTExZWEtYjk0Yi00YjhlYjhhMzhhNjciLCJmaXJzdE5hbWUiOiJBbmRyZWEiLCJsYXN0TmFtZSI6IkZlcnJhcmEiLCJlbmFibGVkIjp0cnVlLCJwcml2YWN5UG9saWN5QWNjZXB0ZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiI1NzMyZDQ0MC05NDY4LTExZWEtYjk0Yi00YjhlYjhhMzhhNjciLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoiY2xvdWQudGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE1ODkyOTg3MDIsImV4cCI6MTU5MTA5ODcwMn0.uSgMsReC1xj_FcTYRzUEvF_9Xe4QhZGUnfyLKP4U2ghEk7YU9bFKKV6JqdStrco2gPodYV58XqESVMmelGXtNQ";
+            var entityId = "4c237d80-95f2-11ea-b94b-4b8eb8a38a67"; //this is the device token taken from thingsboard
+            var webSocket = new WebSocket("wss://cloud.thingsboard.io/api/ws/plugins/telemetry?token=" + token);
+
+
+            webSocket.onopen = function () {
+                var object = {
+                    tsSubCmds: [
+                        {
+                            entityType: "DEVICE",
+                            entityId: entityId,
+                            scope: "LATEST_TELEMETRY",
+                            cmdId: 10
+                        }
+                    ],
+                    historyCmds: [],
+                    attrSubCmds: []
+                };
+                var data = JSON.stringify(object);
+                webSocket.send(data);
+
+            };
+
+            webSocket.onmessage = function (event) { //in this function I store the parsed data in msg
+                var received_msg = event.data;
+                var msg=JSON.parse(event.data);
+                var tempo= msg.data.axis[0][0];
+                var data = new Date(tempo);
+
+                var table = document.getElementById("myTable2");
+
+                table.rows[1].cells[1].innerHTML = msg.data.axis[0][1];  //in this way I add in each cell of the row sensor's data
+                
+
+            };
+
+            webSocket.onclose = function (event) {
+                alert("Connection is closed!");
+            };
+        }
+
+        function LatestCloudZ() {
+            // X-Authorization token
+            var token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzdXBlcmFzZEBsaXZlLml0Iiwic2NvcGVzIjpbIlRFTkFOVF9BRE1JTiJdLCJ1c2VySWQiOiI1NzQ1NzFlMC05NDY4LTExZWEtYjk0Yi00YjhlYjhhMzhhNjciLCJmaXJzdE5hbWUiOiJBbmRyZWEiLCJsYXN0TmFtZSI6IkZlcnJhcmEiLCJlbmFibGVkIjp0cnVlLCJwcml2YWN5UG9saWN5QWNjZXB0ZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiI1NzMyZDQ0MC05NDY4LTExZWEtYjk0Yi00YjhlYjhhMzhhNjciLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoiY2xvdWQudGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE1ODkyOTg3MDIsImV4cCI6MTU5MTA5ODcwMn0.uSgMsReC1xj_FcTYRzUEvF_9Xe4QhZGUnfyLKP4U2ghEk7YU9bFKKV6JqdStrco2gPodYV58XqESVMmelGXtNQ";
+            var entityId = "50f550e0-95f2-11ea-b94b-4b8eb8a38a67"; //this is the device token taken from thingsboard
+            var webSocket = new WebSocket("wss://cloud.thingsboard.io/api/ws/plugins/telemetry?token=" + token);
+
+
+
+            webSocket.onopen = function () {
+                var object = {
+                    tsSubCmds: [
+                        {
+                            entityType: "DEVICE",
+                            entityId: entityId,
+                            scope: "LATEST_TELEMETRY",
+                            cmdId: 10
+                        }
+                    ],
+                    historyCmds: [],
+                    attrSubCmds: []
+                };
+                var data = JSON.stringify(object);
+                webSocket.send(data);
+
+            };
+
+            webSocket.onmessage = function (event) { //in this function I store the parsed data in msg
+                var received_msg = event.data;
+                var msg=JSON.parse(event.data);
+                var tempo= msg.data.axis[0][0];
+                var data = new Date(tempo);
+
+                var table = document.getElementById("myTable2");
+
+                table.rows[1].cells[2].innerHTML = msg.data.axis[0][1];  //in this way I add in each cell of the row sensor's data
+
+            };
+
+            webSocket.onclose = function (event) {
+                alert("Connection is closed!");
+            };
+        }
+
+        function LatestCloudAct() {
+            // X-Authorization token
+            var token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzdXBlcmFzZEBsaXZlLml0Iiwic2NvcGVzIjpbIlRFTkFOVF9BRE1JTiJdLCJ1c2VySWQiOiI1NzQ1NzFlMC05NDY4LTExZWEtYjk0Yi00YjhlYjhhMzhhNjciLCJmaXJzdE5hbWUiOiJBbmRyZWEiLCJsYXN0TmFtZSI6IkZlcnJhcmEiLCJlbmFibGVkIjp0cnVlLCJwcml2YWN5UG9saWN5QWNjZXB0ZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiI1NzMyZDQ0MC05NDY4LTExZWEtYjk0Yi00YjhlYjhhMzhhNjciLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoiY2xvdWQudGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE1ODkyOTg3MDIsImV4cCI6MTU5MTA5ODcwMn0.uSgMsReC1xj_FcTYRzUEvF_9Xe4QhZGUnfyLKP4U2ghEk7YU9bFKKV6JqdStrco2gPodYV58XqESVMmelGXtNQ";
+            var entityId = "6d40f7e0-95f2-11ea-b94b-4b8eb8a38a67"; //this is the device token taken from thingsboard
+            var webSocket = new WebSocket("wss://cloud.thingsboard.io/api/ws/plugins/telemetry?token=" + token);
+
+            webSocket.onopen = function () {
+                var object = {
+                    tsSubCmds: [
+                        {
+                            entityType: "ASSET",
+                            entityId: entityId,
+                            scope: "LATEST_TELEMETRY",
+                            cmdId: 10
+                        }
+                    ],
+                    historyCmds: [],
+                    attrSubCmds: []
+                };
+                var data = JSON.stringify(object);
+                webSocket.send(data);
+
+            };
+
+            webSocket.onmessage = function (event) { //in this function I store the parsed data in msg
+                var received_msg = event.data;
+                var msg=JSON.parse(event.data);
+                var tempo= msg.data.sumAxis[0][0];
+                var data = new Date(tempo);
+
+                var table = document.getElementById("myTable2");
+
+                table.rows[1].cells[3].innerHTML = msg.data.sumAxis[0][1];  //in this way I add in each cell of the row sensor's data
+                table.rows[1].cells[4].innerHTML = msg.data.isRunning[0][1];
+                
+
+            };
+
+            webSocket.onclose = function (event) {
+                alert("Connection is closed!");
+            };
+        }
+
+function prova2() {			//get stream aggregate
+
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var currentTime = new Date().getTime();
+  var olderTime = currentTime - 3600000;
+
+  var xhttp = new XMLHttpRequest();			// Get Request sumAxis and isRunning variables telemetries from asset; it needs device ID, keys, and the time interval (from currentTime - 3600000 to currentTime )
+  xhttp.open('GET', 'https://cloud.thingsboard.io/api/plugins/telemetry/ASSET/6d40f7e0-95f2-11ea-b94b-4b8eb8a38a67/values/timeseries?keys=sumAxis,isRunning&startTs='+ olderTime + '&endTs=' + currentTime + '&limit=60&agg=AVG');
+  xhttp.setRequestHeader('Content-Type', 'application/json');
+  xhttp.setRequestHeader('X-Authorization', 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzdXBlcmFzZEBsaXZlLml0Iiwic2NvcGVzIjpbIlRFTkFOVF9BRE1JTiJdLCJ1c2VySWQiOiI1NzQ1NzFlMC05NDY4LTExZWEtYjk0Yi00YjhlYjhhMzhhNjciLCJmaXJzdE5hbWUiOiJBbmRyZWEiLCJsYXN0TmFtZSI6IkZlcnJhcmEiLCJlbmFibGVkIjp0cnVlLCJwcml2YWN5UG9saWN5QWNjZXB0ZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiI1NzMyZDQ0MC05NDY4LTExZWEtYjk0Yi00YjhlYjhhMzhhNjciLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoiY2xvdWQudGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE1ODkyOTg3MDIsImV4cCI6MTU5MTA5ODcwMn0.uSgMsReC1xj_FcTYRzUEvF_9Xe4QhZGUnfyLKP4U2ghEk7YU9bFKKV6JqdStrco2gPodYV58XqESVMmelGXtNQ'); //X-Authorization to access thingsboard account
+  xhttp.send();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      var response = JSON.parse(this.responseText);
+
+      //storing parsed results in corresponding vectors, so we can access the data.
+					var avg = response.sumAxis;		
+					var tmp = response.isRunning;
+
+					for (var i = 0; i < tmp.length; i++) {			//For cycle to build tabCloud table.
+
+							var table = document.getElementById("tabCloud");
+
+							var row = table.insertRow();
+
+							var cell0 = row.insertCell(0);
+							var cell1 = row.insertCell(1);
+							var cell2 = row.insertCell(2);
+							var cell3 = row.insertCell(3);
+
+								var date = new Date(tmp[i].ts);
+								var year = date.getFullYear();
+								var month = months[date.getMonth()];
+								var day = date.getDate();
+								// Hours part from the timestamp
+								var hours = date.getHours();
+								// Minutes part from the timestamp
+								var minutes = date.getMinutes();
+								// Seconds part from the timestamp
+								var seconds = date.getSeconds();
+								var milliseconds = date.getMilliseconds();
+
+								// Will display timestamp in a human-friendly format
+								var formattedTime = day + " " + month + " " + year + " " + hours + ' : ' + minutes + 'm : ' + seconds + "s : " + milliseconds + "ms";
+								
+								cell0.innerHTML = Number(tmp[i].ts);
+								cell1.innerHTML = formattedTime;
+								cell2.innerHTML = Number(avg[i].value).toFixed(2);
+								cell3.innerHTML = tmp[i].value;
+          }
+
+    }
+
+    console.log(response);					
+
+  }
+
+};
+
+function prova1() {			//get stream aggregate
+
+var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+var currentTime = new Date().getTime();
+var olderTime = currentTime - 3600000;
+
+var xhttp = new XMLHttpRequest();			// Get Request sumAxis and isRunning variables telemetries from asset; it needs device ID, keys, and the time interval (from currentTime - 3600000 to currentTime )
+xhttp.open('GET', 'https://cloud.thingsboard.io/api/plugins/telemetry/DEVICE/46f7a340-95f2-11ea-b94b-4b8eb8a38a67/values/timeseries?keys=axis&startTs='+ olderTime + '&endTs=' + currentTime + '&limit=60&agg=AVG');
+xhttp.setRequestHeader('Content-Type', 'application/json');
+xhttp.setRequestHeader('X-Authorization', 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzdXBlcmFzZEBsaXZlLml0Iiwic2NvcGVzIjpbIlRFTkFOVF9BRE1JTiJdLCJ1c2VySWQiOiI1NzQ1NzFlMC05NDY4LTExZWEtYjk0Yi00YjhlYjhhMzhhNjciLCJmaXJzdE5hbWUiOiJBbmRyZWEiLCJsYXN0TmFtZSI6IkZlcnJhcmEiLCJlbmFibGVkIjp0cnVlLCJwcml2YWN5UG9saWN5QWNjZXB0ZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiI1NzMyZDQ0MC05NDY4LTExZWEtYjk0Yi00YjhlYjhhMzhhNjciLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoiY2xvdWQudGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE1ODkyOTg3MDIsImV4cCI6MTU5MTA5ODcwMn0.uSgMsReC1xj_FcTYRzUEvF_9Xe4QhZGUnfyLKP4U2ghEk7YU9bFKKV6JqdStrco2gPodYV58XqESVMmelGXtNQ'); //X-Authorization to access thingsboard account
+xhttp.send();
+xhttp.onreadystatechange = function() {
+  if (this.readyState == 4 && this.status == 200) {
+    var response = JSON.parse(this.responseText);
+
+    //storing parsed results in corresponding vectors, so we can access the data.
+        var xTMP = response.axis;
+
+        for (var i = 0; i < xTMP.length; i++) {			//For cycle to build tabCloud table.
+
+              var date = new Date(xTMP[i].ts);
+              var year = date.getFullYear();
+              var month = months[date.getMonth()];
+              var day = date.getDate();
+              // Hours part from the timestamp
+              var hours = date.getHours();
+              // Minutes part from the timestamp
+              var minutes = date.getMinutes();
+              // Seconds part from the timestamp
+              var seconds = date.getSeconds();
+              var milliseconds = date.getMilliseconds();
+
+              // Will display timestamp in a human-friendly format
+              var formattedTime = day + " " + month + " " + year + " " + hours + ' : ' + minutes + 'm : ' + seconds + "s : " + milliseconds + "ms";
+              
+              timestamps[i] = Number(xTMP[i].ts);
+              TS[i] = formattedTime;
+              xValues[i] = Number(xTMP[i].value).toFixed(2);
+        }
+  }			
+}
+
+var xhttp2 = new XMLHttpRequest();			// Get Request sumAxis and isRunning variables telemetries from asset; it needs device ID, keys, and the time interval (from currentTime - 3600000 to currentTime )
+xhttp2.open('GET', 'https://cloud.thingsboard.io/api/plugins/telemetry/DEVICE/4c237d80-95f2-11ea-b94b-4b8eb8a38a67/values/timeseries?keys=axis&startTs='+ olderTime + '&endTs=' + currentTime + '&limit=60&agg=AVG');
+xhttp2.setRequestHeader('Content-Type', 'application/json');
+xhttp2.setRequestHeader('X-Authorization', 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzdXBlcmFzZEBsaXZlLml0Iiwic2NvcGVzIjpbIlRFTkFOVF9BRE1JTiJdLCJ1c2VySWQiOiI1NzQ1NzFlMC05NDY4LTExZWEtYjk0Yi00YjhlYjhhMzhhNjciLCJmaXJzdE5hbWUiOiJBbmRyZWEiLCJsYXN0TmFtZSI6IkZlcnJhcmEiLCJlbmFibGVkIjp0cnVlLCJwcml2YWN5UG9saWN5QWNjZXB0ZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiI1NzMyZDQ0MC05NDY4LTExZWEtYjk0Yi00YjhlYjhhMzhhNjciLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoiY2xvdWQudGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE1ODkyOTg3MDIsImV4cCI6MTU5MTA5ODcwMn0.uSgMsReC1xj_FcTYRzUEvF_9Xe4QhZGUnfyLKP4U2ghEk7YU9bFKKV6JqdStrco2gPodYV58XqESVMmelGXtNQ'); //X-Authorization to access thingsboard account
+xhttp2.send();
+xhttp2.onreadystatechange = function() {
+  if (this.readyState == 4 && this.status == 200) {
+    var response = JSON.parse(this.responseText);
+
+    //storing parsed results in corresponding vectors, so we can access the data.
+        var yTMP = response.axis;		
+
+        for (var i = 0; i < yTMP.length; i++) {			//For cycle to build tabCloud table.
+
+              yValues[i] = Number(yTMP[i].value).toFixed(2);
+        }
+  }			
+}
+
+var xhttp3 = new XMLHttpRequest();			// Get Request sumAxis and isRunning variables telemetries from asset; it needs device ID, keys, and the time interval (from currentTime - 3600000 to currentTime )
+xhttp3.open('GET', 'https://cloud.thingsboard.io/api/plugins/telemetry/DEVICE/50f550e0-95f2-11ea-b94b-4b8eb8a38a67/values/timeseries?keys=axis&startTs='+ olderTime + '&endTs=' + currentTime + '&limit=60&agg=AVG');
+xhttp3.setRequestHeader('Content-Type', 'application/json');
+xhttp3.setRequestHeader('X-Authorization', 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzdXBlcmFzZEBsaXZlLml0Iiwic2NvcGVzIjpbIlRFTkFOVF9BRE1JTiJdLCJ1c2VySWQiOiI1NzQ1NzFlMC05NDY4LTExZWEtYjk0Yi00YjhlYjhhMzhhNjciLCJmaXJzdE5hbWUiOiJBbmRyZWEiLCJsYXN0TmFtZSI6IkZlcnJhcmEiLCJlbmFibGVkIjp0cnVlLCJwcml2YWN5UG9saWN5QWNjZXB0ZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiI1NzMyZDQ0MC05NDY4LTExZWEtYjk0Yi00YjhlYjhhMzhhNjciLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoiY2xvdWQudGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE1ODkyOTg3MDIsImV4cCI6MTU5MTA5ODcwMn0.uSgMsReC1xj_FcTYRzUEvF_9Xe4QhZGUnfyLKP4U2ghEk7YU9bFKKV6JqdStrco2gPodYV58XqESVMmelGXtNQ'); //X-Authorization to access thingsboard account
+xhttp3.send();
+xhttp3.onreadystatechange = function() {
+  if (this.readyState == 4 && this.status == 200) {
+    var response = JSON.parse(this.responseText);
+
+    //storing parsed results in corresponding vectors, so we can access the data.
+        var zTMP = response.axis;
+
+        for (var i = 0; i < zTMP.length; i++) {			//For cycle to build tabCloud table.
+
+              zValues[i] = Number(zTMP[i].value).toFixed(2);
+        }
+  }
+}
+
+};
+
+    function createTable() {
+
+      for (var i = 0; i < xValues.length; i++) {			//For cycle to build tabEdge table.
+
+        tmpSma[-1] = 0.0;
+
+        tmpSma[i] = ( Math.abs(Number(xValues[i])) + Math.abs(Number(yValues[i])) + Math.abs(Number(zValues[i])) ) /3;
+
+        smaValue[i] = (Number(tmpSma[i]) - Number(tmpSma[i-1]) );
+
+        if (smaValue[i] > 1 || smaValue < -1) {
+          runningTable[i] = "is Running";
+        } else {
+          runningTable[i] = "is Walking";
+        }
+
+        var table = document.getElementById("tabEdge");
+
+        var row = table.insertRow();
+
+        var cell0 = row.insertCell(0);
+        var cell1 = row.insertCell(1);
+        var cell2 = row.insertCell(2);
+        var cell3 = row.insertCell(3);
+        var cell4 = row.insertCell(4);
+        var cell5 = row.insertCell(5);
+        var cell6 = row.insertCell(6);
+          
+          cell0.innerHTML = timestamps[i];
+          cell1.innerHTML = TS[i];
+          cell2.innerHTML = xValues[i];
+          cell3.innerHTML = yValues[i];
+          cell4.innerHTML = zValues[i];
+          cell5.innerHTML = smaValue[i];
+          cell6.innerHTML = runningTable[i];
+      }
+
+    }
+    
+    function sensors() {              /* function to get values from accelerometer sensor */
+      var cont=-1;
+      var arrayx = [];
+      var arrayy = [];
+      var arrayz = [];
+      let status = document.getElementById('status');
+      
+      
+      if ( 'Accelerometer' in window ) {
+        var sensor = new Accelerometer({frequency: 1});
+        var a = [], b = [], c = [];
+        sensor.addEventListener('reading', () => {
+          cont++;
+          document.getElementById('status').innerHTML = cont;
+          arrayx[cont] = sensor.x;
+          arrayy[cont] = sensor.y;
+          arrayz[cont] = sensor.z;
+          if (cont !=0)
+          {
+            a[cont-1] = arrayx[cont] - arrayx[cont-1];
+            b[cont-1] = arrayy[cont] - arrayy[cont-1];
+            c[cont-1] = arrayz[cont] - arrayz[cont-1];
+            
+            document.getElementById('xAxis').innerHTML = "Movement on X : " + a[cont-1].toFixed(10);
+            document.getElementById('yAxis').innerHTML = "Movement on Y : " + b[cont-1].toFixed(10);    /* calculate movement of sensor from last measurement */
+            document.getElementById('zAxis').innerHTML = "Movement on Z : " + c[cont-1].toFixed(10);
+
+            if (a[cont-1] > 1 || b[cont-1] > 1 || c[cont-1] > 1 )     /* checking if the movement exceeds the treshold */
+              document.getElementById('isMoving').innerHTML = "Moving";
+            else
+              document.getElementById('isMoving').innerHTML = "Staying still";
+          
+          var num=0;
+          var time = 10;
+          if (cont % time == 0)
+          {
+            num = (cont/time);
+            for (var j=0,sum=0,sumx=0,sumy=0,sumz=0; j<time; j++)
+            {
+              sumx += Math.abs(a[j+ (time*(num-1))]);
+              sumy += Math.abs(b[j+ (time*(num-1))]);
+              sumz += Math.abs(c[j+ (time*(num-1))]);
+            }
+
+            var SMA = Math.abs(sumx/time) + Math.abs(sumy/time) + Math.abs(sumz/time);
+            var trsh = 1.0;
+
+
+            document.getElementById('xAvg').innerHTML = "Average on x axis: " + (Math.abs(sumx/time)) + " con cont: " + cont + " con num: " + num;
+            document.getElementById('yAvg').innerHTML = "Average on y axis: " + (Math.abs(sumy/time));
+            document.getElementById('zAvg').innerHTML = "Average on z axis: " + (Math.abs(sumz/time));
+            document.getElementById('totAvg').innerHTML = "Signal Magnitude Area: " + SMA;
+
+            if (SMA > trsh) {
+            document.getElementById('movement').innerHTML = "Moving";
+            } else {
+            document.getElementById('movement').innerHTML = "Staying still";
+            }
+
+          }
+
+
+          
+          var table = document.getElementById("myTable");
+          table.rows[1].cells[0].innerHTML = sensor.x.toFixed(10);  //in this way I add in each cell of the row sensor's data
+          table.rows[1].cells[1].innerHTML = sensor.y.toFixed(10);
+          table.rows[1].cells[2].innerHTML = sensor.z.toFixed(10);
+          
+          var xhttp3 = new XMLHttpRequest();    /* post on thingsboard for x axis value */
+          xhttp3.open('POST', 'https://cloud.thingsboard.io/api/plugins/telemetry/DEVICE/46f7a340-95f2-11ea-b94b-4b8eb8a38a67/timeseries/SERVER_SCOPE');
+          xhttp3.setRequestHeader('Content-Type', 'application/json');
+          xhttp3.setRequestHeader('X-Authorization', 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzdXBlcmFzZEBsaXZlLml0Iiwic2NvcGVzIjpbIlRFTkFOVF9BRE1JTiJdLCJ1c2VySWQiOiI1NzQ1NzFlMC05NDY4LTExZWEtYjk0Yi00YjhlYjhhMzhhNjciLCJmaXJzdE5hbWUiOiJBbmRyZWEiLCJsYXN0TmFtZSI6IkZlcnJhcmEiLCJlbmFibGVkIjp0cnVlLCJwcml2YWN5UG9saWN5QWNjZXB0ZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiI1NzMyZDQ0MC05NDY4LTExZWEtYjk0Yi00YjhlYjhhMzhhNjciLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoiY2xvdWQudGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE1ODkyOTg3MDIsImV4cCI6MTU5MTA5ODcwMn0.uSgMsReC1xj_FcTYRzUEvF_9Xe4QhZGUnfyLKP4U2ghEk7YU9bFKKV6JqdStrco2gPodYV58XqESVMmelGXtNQ');
+          
+          xhttp3.send('{"axis":' + sensor.x.toFixed(10) +  ', "movement":' + Math.abs(a[cont-1].toFixed(10)) +  "}");
+        
+          var xhttp3 = new XMLHttpRequest();    /* post on thingsboard for y axis value */
+          xhttp3.open('POST', 'https://cloud.thingsboard.io/api/plugins/telemetry/DEVICE/4c237d80-95f2-11ea-b94b-4b8eb8a38a67/timeseries/SERVER_SCOPE');
+          xhttp3.setRequestHeader('Content-Type', 'application/json');
+          xhttp3.setRequestHeader('X-Authorization', 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzdXBlcmFzZEBsaXZlLml0Iiwic2NvcGVzIjpbIlRFTkFOVF9BRE1JTiJdLCJ1c2VySWQiOiI1NzQ1NzFlMC05NDY4LTExZWEtYjk0Yi00YjhlYjhhMzhhNjciLCJmaXJzdE5hbWUiOiJBbmRyZWEiLCJsYXN0TmFtZSI6IkZlcnJhcmEiLCJlbmFibGVkIjp0cnVlLCJwcml2YWN5UG9saWN5QWNjZXB0ZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiI1NzMyZDQ0MC05NDY4LTExZWEtYjk0Yi00YjhlYjhhMzhhNjciLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoiY2xvdWQudGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE1ODkyOTg3MDIsImV4cCI6MTU5MTA5ODcwMn0.uSgMsReC1xj_FcTYRzUEvF_9Xe4QhZGUnfyLKP4U2ghEk7YU9bFKKV6JqdStrco2gPodYV58XqESVMmelGXtNQ');
+          
+          xhttp3.send('{"axis":' + sensor.y.toFixed(10) +  ', "movement":' + Math.abs(b[cont-1].toFixed(10)) +  "}");
+
+          var xhttp3 = new XMLHttpRequest();    /* post on thingsboard for z axis value */
+          xhttp3.open('POST', 'https://cloud.thingsboard.io/api/plugins/telemetry/DEVICE/50f550e0-95f2-11ea-b94b-4b8eb8a38a67/timeseries/SERVER_SCOPE');
+          xhttp3.setRequestHeader('Content-Type', 'application/json');
+          xhttp3.setRequestHeader('X-Authorization', 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzdXBlcmFzZEBsaXZlLml0Iiwic2NvcGVzIjpbIlRFTkFOVF9BRE1JTiJdLCJ1c2VySWQiOiI1NzQ1NzFlMC05NDY4LTExZWEtYjk0Yi00YjhlYjhhMzhhNjciLCJmaXJzdE5hbWUiOiJBbmRyZWEiLCJsYXN0TmFtZSI6IkZlcnJhcmEiLCJlbmFibGVkIjp0cnVlLCJwcml2YWN5UG9saWN5QWNjZXB0ZWQiOnRydWUsImlzUHVibGljIjpmYWxzZSwidGVuYW50SWQiOiI1NzMyZDQ0MC05NDY4LTExZWEtYjk0Yi00YjhlYjhhMzhhNjciLCJjdXN0b21lcklkIjoiMTM4MTQwMDAtMWRkMi0xMWIyLTgwODAtODA4MDgwODA4MDgwIiwiaXNzIjoiY2xvdWQudGhpbmdzYm9hcmQuaW8iLCJpYXQiOjE1ODkyOTg3MDIsImV4cCI6MTU5MTA5ODcwMn0.uSgMsReC1xj_FcTYRzUEvF_9Xe4QhZGUnfyLKP4U2ghEk7YU9bFKKV6JqdStrco2gPodYV58XqESVMmelGXtNQ');
+          
+          xhttp3.send('{"axis":' + sensor.z.toFixed(10) +  ', "movement":' + Math.abs(c[cont-1].toFixed(10)) +  "}");
+        }
+
+      });
+
+        sensor.start();
+      }
+      else status.innerHTML = 'Accelerometer not supported';
+    }
+  </script>
+
+</body>
+</html>
