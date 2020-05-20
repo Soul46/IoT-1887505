@@ -7,6 +7,12 @@ Repository work and structure
 ├── Device1.js                      #1st device in node.js for the first assignment
 │   
 ├── Device2.js                      #2nd device in node.js for the first assignment
+│
+├── Accelerometer                   #4th assignment folder with web page html, css and image
+│   │
+│   ├── index.html
+│   ├── main.css
+|   └── img.png
 │   
 │── ferrara_1887505                 #folder for the web page
 │   │
@@ -117,6 +123,21 @@ Both devices will then send via semtech_loramac_send the obtained values to the 
 [Youtube video link](https://www.youtube.com/watch?v=4waQTOxwi6g&feature=youtu.be)
 
 [LinkedIn article](https://www.linkedin.com/pulse/creating-sensor-network-using-virutal-real-devices-via-ferrara/?published=t&trackingId=CZ3nHzb0QoMQ4wDm898lVQ%3D%3D)
+
+## Fourth assignment
+
+In the fourth assignment we created a web application that via Generic Sensors API access the user Accelerometer sensor to retrieve values for each axes to create an activity recognition algorithm.
+The deployment and computation has been executed both in the Cloud-Broker Thingsboard and in the Edge using the Signal Magnitude Area.
+Then in the web page we created different tables to show the values computed and taken from the broker.
+In this way we provide a crowd-sensing extension to our application
+
+##### Links
+
+[Youtube video link](https://www.youtube.com/watch?v=i4N1IQsvqVU&t=)
+
+[LinkedIn article](https://www.linkedin.com/pulse/development-html5-application-uses-generic-sensor-api-ferrara/?published=t)
+
+[Hosted Web App](https://soul46.github.io/)
 
 ## Acknowledgments
 
